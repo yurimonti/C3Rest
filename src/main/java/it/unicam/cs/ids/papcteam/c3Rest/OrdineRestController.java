@@ -1,75 +1,90 @@
-package it.unicam.cs.ids.papcteam.c3;
+package it.unicam.cs.ids.papcteam.c3Rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
+
 
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/ordini")
 public class OrdineRestController {
     @Autowired
-    private final OrdineRepository ordineRepository;
-    private ProdottoRepository prodottoRepository;
-    private ProdottoRestController prodottoRestController;
-    private NegozioRestController negozioRestController;
+    private OrdineRepository ordineRepository;
+    @Autowired
+    private final ProdottoRestController prodottoRestController;
+    @Autowired
+    private final NegozioRestController negozioRestController;
     private CreatoreOrdine creatoreOrdine;
+    @Autowired
     private NegozioRepository negozioRepository;
+    @Autowired
     private LockerRepository lockerRepository;
+    private long negozioId;
+    private List<Long> prodottiId;
+    private long destinazioneId;
 
-    public OrdineRestController(OrdineRepository ordineRepository,ProdottoRepository prodottoRepository,
-                                NegozioRepository negozioRepository,LockerRepository lockerRepository) {
-        this.ordineRepository = ordineRepository;
-        this.prodottoRepository = prodottoRepository;
-        this.prodottoRestController = new ProdottoRestController(prodottoRepository);
-        this.creatoreOrdine = new ConcreteCreatoreOrdine();
-        //this.ordine = new Ordine();
-        this.negozioRepository = negozioRepository;
-        this.negozioRestController = new NegozioRestController(negozioRepository);
-        this.lockerRepository = lockerRepository;
+    public OrdineRestController() {
+        this.prodottoRestController = new ProdottoRestController();
+        this.negozioRestController = new NegozioRestController();
     }
 
-    public CreatoreOrdine getCreatoreOrdine() {
-        return creatoreOrdine;
-    }
 
     /*@PostMapping
-      public void createOrdine(){
-         this.ordineRepository.save(this.ordine);
+    public Ordine createOrdine(){
+        Negozio n = negozioRestController.getNegozioById(this.creatoreOrdine.getEmittente().getId());
+        this.creatoreOrdine.setEmittente(n);
+        Ordine ordine = this.creatoreOrdine.creaOrdine();
+        n.getOrdini().add(ordine);
+        this.ordineRepository.save(ordine);
+        this.negozioRepository.save(n);
+        this.creatoreOrdine = new ConcreteCreatoreOrdine();
+        return ordine;
     }*/
+
+    private void resetId(){
+        this.negozioId = 0;
+        this.prodottiId.clear();
+        this.destinazioneId =0;
+    }
+
     @PostMapping
     public Ordine createOrdine(){
-        Ordine ordine = getCreatoreOrdine().creaOrdine();
+        this.creatoreOrdine = new ConcreteCreatoreOrdine();
+        Negozio n = this.negozioRestController.getNegozioById(this.negozioId);
+        this.creatoreOrdine.setEmittente(n);
+        this.creatoreOrdine.setDestinazione(this.lockerRepository.findById(this.destinazioneId).orElse(null));
+        this.prodottiId.forEach(aLong -> this.creatoreOrdine.addProdotto(this.prodottoRestController.getProdottoById(aLong)));
+        Ordine ordine = this.creatoreOrdine.creaOrdine();
+        n.getOrdini().add(ordine);
         this.ordineRepository.save(ordine);
+        this.negozioRepository.save(n);
+        resetId();
         return ordine;
     }
 
     @PostMapping("/setEmittente")
     public Negozio setEmittenteOrdine(@RequestParam long idNegozio){
         Negozio n = negozioRestController.getNegozioById(idNegozio);
-        getCreatoreOrdine().setEmittente(n);
+        this.negozioId = idNegozio;
         return n;
-        /*Negozio negozio = negozioRepository.findById(idNegozio).orElseThrow();
-        getCreatoreOrdine().setEmittente(negozio);
-        return negozio.getProdotti();*/
     }
 
     @GetMapping("/setProdotto")
     public Prodotto setProdottoOrdine(@RequestParam long idProdotto){
-        Prodotto p = this.negozioRestController.getProdottoById(getCreatoreOrdine().getEmittente().getId(),idProdotto);
-        //negozioRestController.deleteProdottoNegozioById(this.creatoreOrdine.getEmittente().getId(),idProdotto);
+        Prodotto p = this.negozioRestController.getProdottoById(this.negozioId,idProdotto);
+        this.prodottiId = new ArrayList<>();
+        if(p!=null)this.prodottiId.add(p.getId());
         return p;
     }
 
     @GetMapping("/setDestinazione")
-    public void setDestinazioneOrdine(@RequestParam long idDestinazione){
-        Locker locker = this.lockerRepository.findById(idDestinazione).orElseThrow();
-        getCreatoreOrdine().setDestinazione(locker);
+    public Locker setDestinazioneOrdine(@RequestParam long idDestinazione){
+        Locker locker = this.lockerRepository.findById(idDestinazione).orElse(null);
+        this.destinazioneId = idDestinazione;
+        return locker;
     }
 
     @GetMapping("prezzoOrdine/{id}")
@@ -79,7 +94,7 @@ public class OrdineRestController {
 
     @GetMapping("/{id}")
     public Ordine getOrdineById(@PathVariable long id){
-        return this.ordineRepository.findById(id).orElseThrow();
+        return this.ordineRepository.findById(id).orElseThrow(NullPointerException::new);
     }
 
     /*@PatchMapping("{idOrdine}")

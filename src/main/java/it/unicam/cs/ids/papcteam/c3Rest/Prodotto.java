@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.papcteam.c3;
+package it.unicam.cs.ids.papcteam.c3Rest;
 
 import javax.persistence.*;
 import java.util.Random;

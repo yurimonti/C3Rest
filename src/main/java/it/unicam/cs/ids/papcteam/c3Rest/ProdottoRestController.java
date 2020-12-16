@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.papcteam.c3;
+package it.unicam.cs.ids.papcteam.c3Rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,10 +11,9 @@ import java.util.List;
 @RequestMapping("/prodotti")
 public class ProdottoRestController {
     @Autowired
-    private final ProdottoRepository prodottoRepository;
+    private ProdottoRepository prodottoRepository;
 
-    public ProdottoRestController(ProdottoRepository prodottoRepository) {
-        this.prodottoRepository = prodottoRepository;
+    public ProdottoRestController() {
     }
 
     @GetMapping

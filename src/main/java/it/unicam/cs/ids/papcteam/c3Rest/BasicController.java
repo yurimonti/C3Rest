@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.papcteam.c3;
+package it.unicam.cs.ids.papcteam.c3Rest;
 
 
 import org.springframework.web.bind.annotation.GetMapping;

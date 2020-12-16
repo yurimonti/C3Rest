@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.papcteam.c3;
+package it.unicam.cs.ids.papcteam.c3Rest;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +11,9 @@ import java.util.List;
 @RequestMapping("/negozi")
 public class NegozioRestController {
     @Autowired
-    private final NegozioRepository negozioRepository;
+    private NegozioRepository negozioRepository;
 
-    public NegozioRestController(NegozioRepository negozioRepository) {
-        this.negozioRepository = negozioRepository;
+    public NegozioRestController() {
     }
 
     @GetMapping
@@ -24,7 +23,7 @@ public class NegozioRestController {
 
     @GetMapping("/{id}")
     public Negozio getNegozioById(@PathVariable long id){
-        return this.negozioRepository.findById(id).orElseThrow(NullPointerException::new);
+        return this.negozioRepository.findById(id).orElse(null);
     }
 
     @GetMapping("/negozio/{id}")
@@ -35,7 +34,7 @@ public class NegozioRestController {
     @GetMapping("/negozio/{id}/{idProdotto}")
     public Prodotto getProdottoById(@PathVariable long id,@PathVariable long idProdotto){
         return negozioRepository.findById(id).orElseThrow(NullPointerException::new)
-                .getProdotti().stream().filter(prodotto -> prodotto.getId()==idProdotto).findFirst().orElseThrow(NullPointerException::new);
+                .getProdotti().stream().filter(prodotto -> prodotto.getId()==idProdotto).findFirst().orElse(null);
     }
 
     @PostMapping("/negozio/{id}")
@@ -57,8 +56,8 @@ public class NegozioRestController {
 
     @PatchMapping("/{idNegozio}/{idProdotto}")
     public void deleteProdottoNegozioById(@PathVariable long idNegozio,@PathVariable long idProdotto){
-       Negozio n =  getNegozioById(idNegozio);
-       n.getProdotti().removeIf(prodotto -> prodotto.getId()==idProdotto);
-       this.negozioRepository.save(n);
+        Negozio n =  getNegozioById(idNegozio);
+        n.getProdotti().removeIf(prodotto -> prodotto.getId()==idProdotto);
+        this.negozioRepository.save(n);
     }
 }

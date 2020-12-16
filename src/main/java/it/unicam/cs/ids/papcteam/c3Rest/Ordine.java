@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.papcteam.c3;
+package it.unicam.cs.ids.papcteam.c3Rest;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,10 +13,10 @@ public class Ordine {
     private long id;
     @Column(name = "numero_ordine")
     private long numeroOrdine;
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "destinazione_id",referencedColumnName = "id")
     private Locker destinazione;
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "emittente_id",referencedColumnName = "id")
     private Negozio emittente;
     @OneToMany(cascade = CascadeType.ALL)
@@ -109,5 +109,9 @@ public class Ordine {
                 ", prodotti=" + getProdotti() +
                 ", soldi=" + getSoldi() +
                 '}';
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

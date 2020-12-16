@@ -1,6 +1,8 @@
-package it.unicam.cs.ids.papcteam.c3;
+package it.unicam.cs.ids.papcteam.c3Rest;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "clienti")
@@ -22,8 +24,12 @@ public class Cliente {
     @Column(name = "username")
     private String username;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_cliente",referencedColumnName = "id")
+    private List<Ordine> ordini;
+
     public Cliente() {
-        /*this.id = new Random().nextInt(9999);*/
+        this.ordini = new ArrayList<>();
     }
 
     public Cliente(String nome, String cognome, String email, String password) {
@@ -33,6 +39,10 @@ public class Cliente {
         this.nome = nome;
         this.cognome = cognome;
         this.username = (this.nome +'.'+this.cognome).toLowerCase();
+    }
+
+    public List<Ordine> getOrdini() {
+        return ordini;
     }
 
     public long getId() {
@@ -83,3 +93,4 @@ public class Cliente {
         this.username = username;
     }
 }
+
