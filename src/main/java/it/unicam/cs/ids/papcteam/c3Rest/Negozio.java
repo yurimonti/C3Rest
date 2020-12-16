@@ -1,9 +1,7 @@
-package it.unicam.cs.ids.papcteam.c3;
+package it.unicam.cs.ids.papcteam.c3Rest;
 
 import javax.persistence.*;
 import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 @Entity
 @Table(name = "negozi")
@@ -19,11 +17,13 @@ public class Negozio implements PuntoRitiro{
     @Column(name = "orario")
     private String orario;
     @OneToMany(cascade = CascadeType.ALL)
-    //@JoinColumn(name = "np_fid",referencedColumnName = "id")
     private List<Prodotto> prodotti;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Ordine> ordini;
 
     public Negozio() {
         this.prodotti = new ArrayList<>();
+        this.ordini = new ArrayList<>();
     }
 
     public Negozio(String nome, String descrizione,String indirizzo,String orario) {
@@ -32,6 +32,11 @@ public class Negozio implements PuntoRitiro{
         this.descrizione = descrizione;
         this.indirizzo = indirizzo;
         this.orario = orario;
+    }
+
+    @Override
+    public List<Ordine> getOrdini() {
+        return ordini;
     }
 
     /*public void addProdotto(Prodotto prodotto){

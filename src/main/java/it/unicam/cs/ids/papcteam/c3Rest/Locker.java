@@ -1,6 +1,9 @@
-package it.unicam.cs.ids.papcteam.c3;
+package it.unicam.cs.ids.papcteam.c3Rest;
+
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "lockers")
@@ -13,8 +16,11 @@ public class Locker implements PuntoRitiro {
     private String indirizzo;
     @Column(name = "orario")
     private String orario;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Ordine> ordini;
 
     public Locker() {
+        this.ordini = new ArrayList<>();
     }
 
     public Locker(String nome, String indirizzo, String orario) {
@@ -22,6 +28,10 @@ public class Locker implements PuntoRitiro {
         this.nome = nome;
         this.indirizzo = indirizzo;
         this.orario = orario;
+    }
+
+    public long getId() {
+        return id;
     }
 
     @Override
@@ -37,6 +47,11 @@ public class Locker implements PuntoRitiro {
     @Override
     public String getNome() {
         return this.nome;
+    }
+
+    @Override
+    public List<Ordine> getOrdini() {
+        return this.ordini;
     }
 
 }
