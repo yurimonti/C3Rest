@@ -38,7 +38,10 @@ public class Cliente {
         this.password = password;
         this.nome = nome;
         this.cognome = cognome;
-        this.username = (this.nome +'.'+this.cognome).toLowerCase();
+    }
+
+    public void initUsername(){
+        this.username = (this.nome+'.'+this.cognome).toLowerCase();
     }
 
     public List<Ordine> getOrdini() {
