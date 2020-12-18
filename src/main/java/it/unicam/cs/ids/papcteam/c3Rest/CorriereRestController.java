@@ -13,6 +13,8 @@ public class CorriereRestController {
     private CorriereRepository corriereRepository;
     @Autowired
     private OrdineRestController ordineRestController;
+    @Autowired
+    private ChiamataRestController chiamataRestController;
 
     public CorriereRestController() {
     }
@@ -38,6 +40,15 @@ public class CorriereRestController {
         corriere.getOrdini().add(ordineRestController.getOrdineById(idOrdine));
         this.corriereRepository.save(corriere);
         return corriere;
+    }
+
+    @DeleteMapping("/{id}/accettaChiamata")
+    public void accettaChiamata(@PathVariable long id,@RequestParam long idChiamata){
+        Corriere corriere = getCorriereById(id);
+        Chiamata chiamata = this.chiamataRestController.getChiamataById(idChiamata);
+        corriere.getOrdini().add(chiamata.getOrdine());
+        this.chiamataRestController.deleteChiamataById(idChiamata);
+        this.corriereRepository.save(corriere);
     }
 
 }

@@ -12,7 +12,9 @@ public class LoadDataBase {
                                    NegozioRepository negozioRepository,
                                    OrdineRepository ordineRepository){
         return args -> {
-            clienteRepository.save(new Cliente("Mario","Rossi","mario.rossi@gmail.com","mariorossi"));
+            Cliente cliente = new Cliente("Mario","Rossi","mario.rossi@gmail.com","mariorossi");
+            cliente.initUsername();
+            clienteRepository.save(cliente);
             Negozio negozio = new Negozio("ferramenta","ferramenta","Via Roma 10","Chiuso Sabato e Domenica");
             Prodotto p = new Prodotto("vite","vite 5mm al pezzo",0.02);
             //p.setNumero(100);
