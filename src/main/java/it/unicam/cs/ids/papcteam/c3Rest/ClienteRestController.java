@@ -41,6 +41,7 @@ public class ClienteRestController {
 
     @PostMapping
     public void createCliente(@RequestBody Cliente cliente){
+        cliente.initUsername();
         clienteRepository.save(cliente);
     }
     @DeleteMapping("/{id}")

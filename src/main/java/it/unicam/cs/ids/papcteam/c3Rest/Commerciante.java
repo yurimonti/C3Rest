@@ -1,13 +1,12 @@
 package it.unicam.cs.ids.papcteam.c3Rest;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "clienti")
-public class Cliente {
-    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) long id;
+@Table(name = "commercianti")
+public class Commerciante {
+    private @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) long id;
 
     @Column(name = "email")
     private String email;
@@ -24,15 +23,14 @@ public class Cliente {
     @Column(name = "username")
     private String username;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_cliente",referencedColumnName = "id")
-    private List<Ordine> ordini;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "negozio_associato",referencedColumnName = "id")
+    private Negozio negozio;
 
-    public Cliente() {
-        this.ordini = new ArrayList<>();
+    public Commerciante() {
     }
 
-    public Cliente(String nome, String cognome, String email, String password) {
+    public Commerciante(String nome, String cognome, String email, String password) {
         this();
         this.email = email;
         this.password = password;
@@ -44,17 +42,13 @@ public class Cliente {
         this.username = (this.nome+'.'+this.cognome).toLowerCase();
     }
 
-    public List<Ordine> getOrdini() {
-        return ordini;
-    }
-
     public long getId() {
         return id;
     }
 
-    /*public void setId(long id) {
+    public void setId(long id) {
         this.id = id;
-    }*/
+    }
 
     public String getEmail() {
         return email;
@@ -76,16 +70,16 @@ public class Cliente {
         return nome;
     }
 
-    public void setNome(String name) {
-        this.nome = name;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getCognome() {
         return cognome;
     }
 
-    public void setCognome(String surname) {
-        this.cognome = surname;
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
     }
 
     public String getUsername() {
@@ -95,5 +89,12 @@ public class Cliente {
     public void setUsername(String username) {
         this.username = username;
     }
-}
 
+    public Negozio getNegozio() {
+        return negozio;
+    }
+
+    public void setNegozio(Negozio negozio) {
+        this.negozio = negozio;
+    }
+}
