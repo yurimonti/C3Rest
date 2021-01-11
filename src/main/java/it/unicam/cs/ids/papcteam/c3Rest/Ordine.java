@@ -47,7 +47,9 @@ public class Ordine {
     }
 
     public void calcoloSoldi(){
-        this.soldi = getProdotti().stream().mapToDouble(Prodotto::getPrezzo).sum();
+        for (Prodotto o : this.prodotti) {
+            this.soldi +=o.getNumero()*o.getPrezzo();
+        }
     }
 
     public long getNumeroOrdine() {

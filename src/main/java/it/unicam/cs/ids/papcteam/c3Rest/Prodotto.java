@@ -1,6 +1,7 @@
 package it.unicam.cs.ids.papcteam.c3Rest;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Random;
 
 @Entity
@@ -16,8 +17,11 @@ public class Prodotto {
     private String descrizione;
     @Column(name = "numero")
     private int numero;
+    @Column(name = "serialCode")
+    private long serialCode;
 
     public Prodotto(){
+        this.serialCode = new Random().nextInt(999999999);
     }
 
     public Prodotto(String nome, String descrizione, double prezzo) {
@@ -31,6 +35,14 @@ public class Prodotto {
     public Prodotto(String nome, String descrizione, double prezzo,int numero) {
         this(nome,descrizione,prezzo);
         this.numero = numero;
+    }
+
+    public long getSerialCode(){
+        return this.serialCode;
+    }
+
+    public void setSerialCode(long serialCode){
+        this.serialCode = serialCode;
     }
 
     public int getNumero() {
@@ -71,6 +83,19 @@ public class Prodotto {
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Prodotto prodotto = (Prodotto) o;
+        return Double.compare(prodotto.prezzo, prezzo) == 0 && serialCode == prodotto.serialCode && Objects.equals(nome, prodotto.nome) && Objects.equals(descrizione, prodotto.descrizione);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(prezzo, nome, descrizione, serialCode);
     }
 
     @Override
