@@ -16,11 +16,11 @@ public class LoadDataBase {
             cliente.initUsername();
             clienteRepository.save(cliente);
             Negozio negozio = new Negozio("ferramenta","ferramenta","Via Roma 10","Chiuso Sabato e Domenica");
-            Prodotto p = new Prodotto("vite","vite 5mm al pezzo",0.02);
+            Prodotto p = new Prodotto("vite","vite 5mm al pezzo",0.02,10);
             //p.setNumero(100);
             negozio.getProdotti().add(p);
-            negozio.getProdotti().add(new Prodotto("tubo","tubo ferro 32 mm diametro al Kg",6.55));
-            Prodotto p1 = new Prodotto("carta vetrata","carta vetrata 100",1.25);
+            negozio.getProdotti().add(new Prodotto("tubo","tubo ferro 32 mm diametro al Kg",6.55,22));
+            Prodotto p1 = new Prodotto("carta vetrata","carta vetrata 100",1.25,105);
             negozio.getProdotti().add(p1);
             Ordine ordine = new Ordine(negozio);
             ordine.getProdotti().add(p);

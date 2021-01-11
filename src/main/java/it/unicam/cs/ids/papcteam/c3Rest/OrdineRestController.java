@@ -23,7 +23,8 @@ public class OrdineRestController {
     @Autowired
     private LockerRepository lockerRepository;
     private long negozioId;
-    private List<Long> prodottiId;
+    private List<Prodotto> prodotti;
+    //private List<Long> prodottiId;
     private long destinazioneId;
 
     public OrdineRestController() {
@@ -46,7 +47,8 @@ public class OrdineRestController {
 
     private void resetId(){
         this.negozioId = 0;
-        this.prodottiId.clear();
+        this.prodotti.clear();
+        //this.prodottiId.clear();
         this.destinazioneId =0;
     }
 
@@ -56,7 +58,13 @@ public class OrdineRestController {
         Negozio n = this.negozioRestController.getNegozioById(this.negozioId);
         this.creatoreOrdine.setEmittente(n);
         this.creatoreOrdine.setDestinazione(this.lockerRepository.findById(this.destinazioneId).orElse(null));
-        this.prodottiId.forEach(aLong -> this.creatoreOrdine.addProdotto(this.prodottoRestController.getProdottoById(aLong)));
+        this.prodotti.forEach(prodotto -> {
+            this.creatoreOrdine.addProdotto(prodotto);
+            this.prodottoRestController.getProdottoRepository().findAll().stream()
+                    .filter(prodotto1 -> prodotto.getSerialCode()==prodotto1.getSerialCode())
+                    .forEach(prodotto1 -> prodotto1.setNumero(prodotto1.getNumero()-prodotto.getNumero()));
+        });
+        //this.prodottiId.forEach(aLong -> this.creatoreOrdine.addProdotto(this.prodottoRestController.getProdottoById(aLong)));
         Ordine ordine = this.creatoreOrdine.creaOrdine();
         n.getOrdini().add(ordine);
         this.ordineRepository.save(ordine);
@@ -73,11 +81,16 @@ public class OrdineRestController {
     }
 
     @GetMapping("/setProdotto")
-    public Prodotto setProdottoOrdine(@RequestParam long idProdotto){
+    public Prodotto setProdottoOrdine(@RequestParam long idProdotto,@RequestParam int number){
         Prodotto p = this.negozioRestController.getProdottoById(this.negozioId,idProdotto);
-        this.prodottiId = new ArrayList<>();
-        if(p!=null)this.prodottiId.add(p.getId());
-        return p;
+        Prodotto p1 = new Prodotto(p.getNome(),p.getDescrizione(),p.getPrezzo(),number);
+        p1.setSerialCode(p.getSerialCode());
+        this.prodotti = new ArrayList<>();
+        this.prodotti.add(p1);
+        return p1;
+        /*this.prodottiId = new ArrayList<>();
+        if(p!=null)this.prodottiId.add(p.getId());*/
+        //return p;
     }
 
     @GetMapping("/setDestinazione")
@@ -96,45 +109,5 @@ public class OrdineRestController {
     public Ordine getOrdineById(@PathVariable long id){
         return this.ordineRepository.findById(id).orElseThrow(NullPointerException::new);
     }
-
-    /*@PatchMapping("{idOrdine}")
-    public void aggiungiProdotto(@PathVariable long idOrdine,@RequestParam long prodottoId){
-        Ordine o = this.ordineRepository.findById(idOrdine).orElseThrow();
-        o.getProdotti().add(this.prodottoRestController.getProdotti().stream().filter(prodotto -> prodotto.getId()==prodottoId).findFirst().orElseThrow());
-        this.ordineRepository.save(o);
-    }*/
-
-    /*@GetMapping("/setEmittente")
-    public List<Prodotto> setEmittenteOrdine(@RequestParam long idNegozio){
-        Negozio negozio = negozioRestController.getNegozioById(idNegozio);
-        this.ordine = new Ordine(negozio);
-        return negozio.getProdotti();
-    }*/
-
-/*    @PutMapping("/setEmittente")
-    public Ordine setEmittenteOrdine(@RequestParam long idNegozio){
-        Negozio negozio = negozioRestController.getNegozioById(idNegozio);
-        this.creatoreOrdine.setEmittente(negozio);
-        return this.creatoreOrdine.creaOrdine();
-    }*/
-
-    /*@GetMapping("/setProdotto")
-    public Prodotto setProdottoOrdine(@RequestParam long idProdotto){
-        Prodotto p = this.negozioRestController.getProdottoById(this.ordine.getEmittente().getId(),idProdotto);
-        this.ordine.getProdotti().add(p);
-        //negozioRestController.deleteProdottoNegozioById(this.creatoreOrdine.getEmittente().getId(),idProdotto);
-        return p;
-    }*/
-
-    /*@GetMapping("/setDestinazione")
-    public void setDestinazioneOrdine(@RequestParam long idDestinazione){
-        Locker locker = this.lockerRepository.findById(idDestinazione).orElseThrow();
-        this.ordine.setDestinazione(locker);
-    }*/
-
-    /*@GetMapping("prezzoOrdine/{id}")
-    public double getPrezzoOrdine(@PathVariable long id){
-        return getOrdineById(id).getSoldi();
-    }*/
 
 }
