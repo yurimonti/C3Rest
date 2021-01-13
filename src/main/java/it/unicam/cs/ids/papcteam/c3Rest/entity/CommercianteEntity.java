@@ -1,10 +1,10 @@
-package it.unicam.cs.ids.papcteam.c3Rest;
+package it.unicam.cs.ids.papcteam.c3Rest.entity;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "commercianti")
-public class Commerciante {
+public class CommercianteEntity {
     private @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) long id;
 
@@ -25,12 +25,12 @@ public class Commerciante {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "negozio_associato",referencedColumnName = "id")
-    private Negozio negozio;
+    private NegozioEntity negozio;
 
-    public Commerciante() {
+    public CommercianteEntity() {
     }
 
-    public Commerciante(String nome, String cognome, String email, String password) {
+    public CommercianteEntity(String nome, String cognome, String email, String password) {
         this();
         this.email = email;
         this.password = password;
@@ -90,11 +90,11 @@ public class Commerciante {
         this.username = username;
     }
 
-    public Negozio getNegozio() {
+    public NegozioEntity getNegozio() {
         return negozio;
     }
 
-    public void setNegozio(Negozio negozio) {
+    public void setNegozio(NegozioEntity negozio) {
         this.negozio = negozio;
     }
 }

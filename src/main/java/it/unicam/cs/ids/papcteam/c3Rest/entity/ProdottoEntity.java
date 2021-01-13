@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.papcteam.c3Rest;
+package it.unicam.cs.ids.papcteam.c3Rest.entity;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -6,7 +6,7 @@ import java.util.Random;
 
 @Entity
 @Table(name = "prodotti")
-public class Prodotto {
+public class ProdottoEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "prezzo")
@@ -20,11 +20,11 @@ public class Prodotto {
     @Column(name = "serialCode")
     private long serialCode;
 
-    public Prodotto(){
+    public ProdottoEntity(){
         this.serialCode = new Random().nextInt(999999999);
     }
 
-    public Prodotto(String nome, String descrizione, double prezzo) {
+    public ProdottoEntity(String nome, String descrizione, double prezzo) {
         this();
         this.prezzo = prezzo;
         this.nome = nome;
@@ -32,7 +32,7 @@ public class Prodotto {
         this.numero = 1;
     }
 
-    public Prodotto(String nome, String descrizione, double prezzo,int numero) {
+    public ProdottoEntity(String nome, String descrizione, double prezzo, int numero) {
         this(nome,descrizione,prezzo);
         this.numero = numero;
     }
@@ -89,7 +89,7 @@ public class Prodotto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Prodotto prodotto = (Prodotto) o;
+        ProdottoEntity prodotto = (ProdottoEntity) o;
         return Double.compare(prodotto.prezzo, prezzo) == 0 && serialCode == prodotto.serialCode && Objects.equals(nome, prodotto.nome) && Objects.equals(descrizione, prodotto.descrizione);
     }
 

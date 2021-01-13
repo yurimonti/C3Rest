@@ -1,5 +1,12 @@
 package it.unicam.cs.ids.papcteam.c3Rest;
 
+import it.unicam.cs.ids.papcteam.c3Rest.entity.ClienteEntity;
+import it.unicam.cs.ids.papcteam.c3Rest.entity.NegozioEntity;
+import it.unicam.cs.ids.papcteam.c3Rest.entity.OrdineEntity;
+import it.unicam.cs.ids.papcteam.c3Rest.entity.ProdottoEntity;
+import it.unicam.cs.ids.papcteam.c3Rest.repository.ClienteRepository;
+import it.unicam.cs.ids.papcteam.c3Rest.repository.NegozioRepository;
+import it.unicam.cs.ids.papcteam.c3Rest.repository.OrdineRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,17 +19,17 @@ public class LoadDataBase {
                                    NegozioRepository negozioRepository,
                                    OrdineRepository ordineRepository){
         return args -> {
-            Cliente cliente = new Cliente("Mario","Rossi","mario.rossi@gmail.com","mariorossi");
+            ClienteEntity cliente = new ClienteEntity("Mario","Rossi","mario.rossi@gmail.com","mariorossi");
             cliente.initUsername();
             clienteRepository.save(cliente);
-            Negozio negozio = new Negozio("ferramenta","ferramenta","Via Roma 10","Chiuso Sabato e Domenica");
-            Prodotto p = new Prodotto("vite","vite 5mm al pezzo",0.02,10);
+            NegozioEntity negozio = new NegozioEntity("ferramenta","ferramenta","Via Roma 10","Chiuso Sabato e Domenica");
+            ProdottoEntity p = new ProdottoEntity("vite","vite 5mm al pezzo",0.02,10);
             //p.setNumero(100);
             negozio.getProdotti().add(p);
-            negozio.getProdotti().add(new Prodotto("tubo","tubo ferro 32 mm diametro al Kg",6.55,22));
-            Prodotto p1 = new Prodotto("carta vetrata","carta vetrata 100",1.25,105);
+            negozio.getProdotti().add(new ProdottoEntity("tubo","tubo ferro 32 mm diametro al Kg",6.55,22));
+            ProdottoEntity p1 = new ProdottoEntity("carta vetrata","carta vetrata 100",1.25,105);
             negozio.getProdotti().add(p1);
-            Ordine ordine = new Ordine(negozio);
+            OrdineEntity ordine = new OrdineEntity(negozio);
             ordine.getProdotti().add(p);
             ordine.getProdotti().add(p1);
             ordineRepository.save(ordine);

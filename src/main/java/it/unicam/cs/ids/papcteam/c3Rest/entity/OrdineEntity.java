@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.papcteam.c3Rest;
+package it.unicam.cs.ids.papcteam.c3Rest.entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -8,38 +8,54 @@ import java.util.Random;
 
 @Entity
 @Table(name = "ordini")
-public class Ordine {
+public class OrdineEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "numero_ordine")
     private long numeroOrdine;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "destinazione_id",referencedColumnName = "id")
-    private Locker destinazione;
+    private LockerEntity destinazione;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "emittente_id",referencedColumnName = "id")
-    private Negozio emittente;
+    private NegozioEntity emittente;
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Prodotto> prodotti;
+    private List<ProdottoEntity> prodotti;
     @Column(name = "soldi")
     private double soldi;
+    @Column(name = "stato")
+    @Enumerated
+    private StatoOrdine statoOrdine;
 
-    public Ordine() {
+    public OrdineEntity() {
         this.numeroOrdine = new Random().nextInt(99999999);
         this.prodotti = new ArrayList<>();
         this.soldi = 0;
         this.emittente= null;
         this.destinazione =null;
+        this.statoOrdine = StatoOrdine.ESEGUITO;
     }
 
-    public Ordine(Negozio emittente){
+    public OrdineEntity(NegozioEntity emittente){
         this();
         this.emittente = emittente;
     }
 
-    public Ordine(Locker destinazione, Negozio emittente) {
+    public OrdineEntity(LockerEntity destinazione, NegozioEntity emittente) {
         this(emittente);
         this.destinazione = destinazione;
+    }
+
+    public StatoOrdine getStatoOrdine() {
+        return statoOrdine;
+    }
+
+    public void setSoldi(double soldi) {
+        this.soldi = soldi;
+    }
+
+    public void setStatoOrdine(StatoOrdine statoOrdine) {
+        this.statoOrdine = statoOrdine;
     }
 
     public long getId() {
@@ -47,7 +63,7 @@ public class Ordine {
     }
 
     public void calcoloSoldi(){
-        for (Prodotto o : this.prodotti) {
+        for (ProdottoEntity o : this.prodotti) {
             this.soldi +=o.getNumero()*o.getPrezzo();
         }
     }
@@ -60,27 +76,27 @@ public class Ordine {
         this.numeroOrdine = numeroOrdine;
     }
 
-    public Locker getDestinazione() {
+    public LockerEntity getDestinazione() {
         return destinazione;
     }
 
-    public void setDestinazione(Locker destinazione) {
+    public void setDestinazione(LockerEntity destinazione) {
         this.destinazione = destinazione;
     }
 
-    public Negozio getEmittente() {
+    public NegozioEntity getEmittente() {
         return emittente;
     }
 
-    public void setEmittente(Negozio emittente) {
+    public void setEmittente(NegozioEntity emittente) {
         this.emittente = emittente;
     }
 
-    public List<Prodotto> getProdotti() {
+    public List<ProdottoEntity> getProdotti() {
         return prodotti;
     }
 
-    public void setProdotti(List<Prodotto> prodotti) {
+    public void setProdotti(List<ProdottoEntity> prodotti) {
         this.prodotti.addAll(prodotti);
     }
 
@@ -92,7 +108,7 @@ public class Ordine {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Ordine ordine = (Ordine) o;
+        OrdineEntity ordine = (OrdineEntity) o;
         return id == ordine.id && numeroOrdine == ordine.numeroOrdine && Double.compare(ordine.soldi, soldi) == 0 && Objects.equals(destinazione, ordine.destinazione) && Objects.equals(emittente, ordine.emittente) && Objects.equals(prodotti, ordine.prodotti);
     }
 
@@ -110,6 +126,7 @@ public class Ordine {
                 ", emittente=" + getEmittente() +
                 ", prodotti=" + getProdotti() +
                 ", soldi=" + getSoldi() +
+                ", stato=" + getStatoOrdine().toString() +
                 '}';
     }
 
