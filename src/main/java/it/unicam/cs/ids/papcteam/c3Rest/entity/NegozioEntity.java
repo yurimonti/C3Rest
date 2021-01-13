@@ -1,11 +1,13 @@
-package it.unicam.cs.ids.papcteam.c3Rest;
+package it.unicam.cs.ids.papcteam.c3Rest.entity;
+
+import it.unicam.cs.ids.papcteam.c3Rest.PuntoRitiro;
 
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
 @Table(name = "negozi")
-public class Negozio implements PuntoRitiro{
+public class NegozioEntity implements PuntoRitiro {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "nome")
@@ -17,16 +19,16 @@ public class Negozio implements PuntoRitiro{
     @Column(name = "orario")
     private String orario;
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Prodotto> prodotti;
+    private List<ProdottoEntity> prodotti;
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Ordine> ordini;
+    private List<OrdineEntity> ordini;
 
-    public Negozio() {
+    public NegozioEntity() {
         this.prodotti = new ArrayList<>();
         this.ordini = new ArrayList<>();
     }
 
-    public Negozio(String nome, String descrizione,String indirizzo,String orario) {
+    public NegozioEntity(String nome, String descrizione, String indirizzo, String orario) {
         this();
         this.nome = nome;
         this.descrizione = descrizione;
@@ -35,7 +37,7 @@ public class Negozio implements PuntoRitiro{
     }
 
     @Override
-    public List<Ordine> getOrdini() {
+    public List<OrdineEntity> getOrdini() {
         return ordini;
     }
 
@@ -80,7 +82,7 @@ public class Negozio implements PuntoRitiro{
         return descrizione;
     }
 
-    public List<Prodotto> getProdotti() {
+    public List<ProdottoEntity> getProdotti() {
         return prodotti;
     }
 
@@ -98,7 +100,7 @@ public class Negozio implements PuntoRitiro{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Negozio negozio = (Negozio) o;
+        NegozioEntity negozio = (NegozioEntity) o;
         return id == negozio.id && nome.equals(negozio.nome) && descrizione.equals(negozio.descrizione) && indirizzo.equals(negozio.indirizzo) && orario.equals(negozio.orario) && prodotti.equals(negozio.prodotti);
     }
 

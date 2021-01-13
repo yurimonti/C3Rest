@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.papcteam.c3Rest;
+package it.unicam.cs.ids.papcteam.c3Rest.entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "corrieri")
-public class Corriere {
+public class CorriereEntity {
     private @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) long id;
 
@@ -28,13 +28,13 @@ public class Corriere {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_corriere",referencedColumnName = "id")
-    private List<Ordine> ordini;
+    private List<OrdineEntity> ordini;
 
-    public Corriere() {
+    public CorriereEntity() {
         this.ordini = new ArrayList<>();
     }
 
-    public Corriere(String nome, String cognome, String email, String password) {
+    public CorriereEntity(String nome, String cognome, String email, String password) {
         this();
         this.email = email;
         this.password = password;
@@ -46,7 +46,7 @@ public class Corriere {
         this.username = (this.nome+'.'+this.cognome).toLowerCase();
     }
 
-    public List<Ordine> getOrdini() {
+    public List<OrdineEntity> getOrdini() {
         return ordini;
     }
 
@@ -102,7 +102,7 @@ public class Corriere {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Corriere corriere = (Corriere) o;
+        CorriereEntity corriere = (CorriereEntity) o;
         return id == corriere.id && email.equals(corriere.email) && password.equals(corriere.password) && nome.equals(corriere.nome) && cognome.equals(corriere.cognome) && Objects.equals(username, corriere.username) && Objects.equals(ordini, corriere.ordini);
     }
 
@@ -120,7 +120,7 @@ public class Corriere {
                 ", nome='" + nome + '\'' +
                 ", cognome='" + cognome + '\'' +
                 ", username='" + username + '\'' +
-                ", ordini=" + ordini.stream().map(Ordine::getId).toString() +
+                ", ordini=" + ordini.stream().map(OrdineEntity::getId).toString() +
                 '}';
     }
 }

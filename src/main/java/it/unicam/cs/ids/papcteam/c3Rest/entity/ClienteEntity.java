@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.papcteam.c3Rest;
+package it.unicam.cs.ids.papcteam.c3Rest.entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "clienti")
-public class Cliente {
+public class ClienteEntity {
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) long id;
 
     @Column(name = "email")
@@ -26,13 +26,13 @@ public class Cliente {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_cliente",referencedColumnName = "id")
-    private List<Ordine> ordini;
+    private List<OrdineEntity> ordini;
 
-    public Cliente() {
+    public ClienteEntity() {
         this.ordini = new ArrayList<>();
     }
 
-    public Cliente(String nome, String cognome, String email, String password) {
+    public ClienteEntity(String nome, String cognome, String email, String password) {
         this();
         this.email = email;
         this.password = password;
@@ -44,7 +44,7 @@ public class Cliente {
         this.username = (this.nome+'.'+this.cognome).toLowerCase();
     }
 
-    public List<Ordine> getOrdini() {
+    public List<OrdineEntity> getOrdini() {
         return ordini;
     }
 

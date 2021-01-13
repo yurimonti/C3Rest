@@ -1,5 +1,7 @@
-package it.unicam.cs.ids.papcteam.c3Rest;
+package it.unicam.cs.ids.papcteam.c3Rest.controller;
 
+import it.unicam.cs.ids.papcteam.c3Rest.repository.ProdottoRepository;
+import it.unicam.cs.ids.papcteam.c3Rest.entity.ProdottoEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +19,7 @@ public class ProdottoRestController {
     }
 
     @GetMapping
-    public List<Prodotto> getProdotti(){
+    public List<ProdottoEntity> getProdotti(){
         return this.prodottoRepository.findAll();
     }
 
@@ -26,7 +28,7 @@ public class ProdottoRestController {
     }
 
     @GetMapping("/{id}")
-    public Prodotto getProdottoById(@PathVariable long id){
+    public ProdottoEntity getProdottoById(@PathVariable long id){
         return this.prodottoRepository.findById(id).orElseThrow();
     }
 

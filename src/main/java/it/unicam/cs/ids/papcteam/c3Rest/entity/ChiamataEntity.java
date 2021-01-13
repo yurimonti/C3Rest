@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.papcteam.c3Rest;
+package it.unicam.cs.ids.papcteam.c3Rest.entity;
 
 import javax.persistence.*;
 /**
@@ -14,24 +14,24 @@ import javax.persistence.*;
  **/
 @Entity
 @Table(name = "chiamate")
-public class Chiamata {
+public class ChiamataEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "negozio_id",referencedColumnName = "id")
-    private Negozio negozio;
+    private NegozioEntity negozio;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ordine_id",referencedColumnName = "id")
-    private Ordine ordine;
+    private OrdineEntity ordine;
 
-    public Chiamata() {
+    public ChiamataEntity() {
     }
 
-    public Ordine getOrdine() {
+    public OrdineEntity getOrdine() {
         return ordine;
     }
 
-    public void setOrdine(Ordine ordine) {
+    public void setOrdine(OrdineEntity ordine) {
         this.ordine = ordine;
     }
 
@@ -43,11 +43,11 @@ public class Chiamata {
         this.id = id;
     }
 
-    public Negozio getNegozio() {
+    public NegozioEntity getNegozio() {
         return negozio;
     }
 
-    public void setNegozio(Negozio negozio) {
+    public void setNegozio(NegozioEntity negozio) {
         this.negozio = negozio;
     }
 }

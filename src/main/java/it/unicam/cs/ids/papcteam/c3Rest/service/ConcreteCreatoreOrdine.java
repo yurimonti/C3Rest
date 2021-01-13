@@ -1,12 +1,19 @@
-package it.unicam.cs.ids.papcteam.c3Rest;
+package it.unicam.cs.ids.papcteam.c3Rest.service;
+
+import it.unicam.cs.ids.papcteam.c3Rest.entity.LockerEntity;
+import it.unicam.cs.ids.papcteam.c3Rest.entity.NegozioEntity;
+import it.unicam.cs.ids.papcteam.c3Rest.entity.OrdineEntity;
+import it.unicam.cs.ids.papcteam.c3Rest.entity.ProdottoEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ConcreteCreatoreOrdine implements CreatoreOrdine{
-    private Negozio emittente;
-    private Locker destinazione;
-    private List<Prodotto> prodotti;
+    private NegozioEntity emittente;
+    private LockerEntity destinazione;
+    private List<ProdottoEntity> prodotti;
 
     public ConcreteCreatoreOrdine() {
         this.emittente = null;
@@ -14,34 +21,34 @@ public class ConcreteCreatoreOrdine implements CreatoreOrdine{
         this.prodotti = new ArrayList<>();
     }
     @Override
-    public Negozio getEmittente() {
+    public NegozioEntity getEmittente() {
         return this.emittente;
     }
     @Override
-    public void setEmittente(Negozio emittente) {
+    public void setEmittente(NegozioEntity emittente) {
         this.emittente = emittente;
     }
     @Override
-    public void addProdotto(Prodotto prodotto) {
+    public void addProdotto(ProdottoEntity prodotto) {
         this.prodotti.add(prodotto);
     }
     @Override
-    public Locker getDestinazione(){
+    public LockerEntity getDestinazione(){
         return this.destinazione;
     }
     @Override
-    public void setDestinazione(Locker destinazione) {
+    public void setDestinazione(LockerEntity destinazione) {
         this.destinazione = destinazione;
     }
 
     @Override
-    public List<Prodotto> getProdotti(){
+    public List<ProdottoEntity> getProdotti(){
         return this.prodotti;
     }
 
     @Override
-    public Ordine creaOrdine() {
-        Ordine o = new Ordine();
+    public OrdineEntity creaOrdine() {
+        OrdineEntity o = new OrdineEntity();
         if(this.destinazione!=null){
             o.setEmittente(this.emittente);
             o.setDestinazione(this.destinazione);
