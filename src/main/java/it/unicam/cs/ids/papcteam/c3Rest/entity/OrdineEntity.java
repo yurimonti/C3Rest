@@ -119,11 +119,14 @@ public class OrdineEntity {
 
     @Override
     public String toString() {
+        String s;
+        if (getDestinazione()== null) s = "null";
+        else s = getDestinazione().toString();
         return "Ordine{" +
                 "id=" + getId() +
                 ", numeroOrdine=" + getNumeroOrdine() +
-                ", destinazione=" + getDestinazione() +
-                ", emittente=" + getEmittente() +
+                ", destinazione=" + s +
+                ", emittente=" + getEmittente().toString() +
                 ", prodotti=" + getProdotti() +
                 ", soldi=" + getSoldi() +
                 ", stato=" + getStatoOrdine().toString() +
