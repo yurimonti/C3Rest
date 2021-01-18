@@ -8,17 +8,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public interface CreatoreOrdine {
     void setEmittente(NegozioEntity emittente);
     void addProdotto(ProdottoEntity prodotto);
+
+    void addProdotto(ProdottoEntity prodotto, int numero);
 
     LockerEntity getDestinazione();
 
     void setDestinazione(LockerEntity destinazione);
 
     List<ProdottoEntity> getProdotti();
-
+    ProdottoEntity getProdottoBySerialCode(long code);
     OrdineEntity creaOrdine();
     NegozioEntity getEmittente();
 

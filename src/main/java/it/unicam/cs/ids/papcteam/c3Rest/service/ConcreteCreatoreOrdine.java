@@ -4,12 +4,13 @@ import it.unicam.cs.ids.papcteam.c3Rest.entity.LockerEntity;
 import it.unicam.cs.ids.papcteam.c3Rest.entity.NegozioEntity;
 import it.unicam.cs.ids.papcteam.c3Rest.entity.OrdineEntity;
 import it.unicam.cs.ids.papcteam.c3Rest.entity.ProdottoEntity;
-import org.springframework.stereotype.Service;
 
+import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
-@Service
+
 public class ConcreteCreatoreOrdine implements CreatoreOrdine{
     private NegozioEntity emittente;
     private LockerEntity destinazione;
@@ -32,6 +33,20 @@ public class ConcreteCreatoreOrdine implements CreatoreOrdine{
     public void addProdotto(ProdottoEntity prodotto) {
         this.prodotti.add(prodotto);
     }
+
+    @Override
+    public void addProdotto(ProdottoEntity prodotto, int numero){
+        Predicate<ProdottoEntity> predicate = prodottoEntity -> prodottoEntity.getSerialCode()==prodotto.getSerialCode();
+        if (this.prodotti.stream().anyMatch(predicate)){
+            ProdottoEntity prodottoIn = this.prodotti.stream().filter(predicate).findFirst().orElseThrow(NullPointerException::new);
+            prodottoIn.setNumero(prodottoIn.getNumero()+numero);
+            this.prodotti.add(prodottoIn);
+        } else{
+            prodotto.setNumero(numero);
+            this.prodotti.add(prodotto);
+        }
+    }
+
     @Override
     public LockerEntity getDestinazione(){
         return this.destinazione;
@@ -44,6 +59,12 @@ public class ConcreteCreatoreOrdine implements CreatoreOrdine{
     @Override
     public List<ProdottoEntity> getProdotti(){
         return this.prodotti;
+    }
+
+    @Override
+    public ProdottoEntity getProdottoBySerialCode(long code) {
+        return this.prodotti.stream().filter(prodottoEntity -> prodottoEntity.getSerialCode()==code)
+                .findAny().orElseThrow(NullPointerException::new);
     }
 
     @Override
@@ -60,7 +81,14 @@ public class ConcreteCreatoreOrdine implements CreatoreOrdine{
             o.setProdotti(this.prodotti);
             o.calcoloSoldi();
         }
+        this.clear();
         return o;
+    }
+
+    private void clear() {
+        setEmittente(null);
+        setDestinazione(null);
+        this.prodotti.clear();
     }
 
 }

@@ -37,6 +37,7 @@ public class OrdineRestController {
     private long destinazioneId;
 
     public OrdineRestController() {
+        this.creatoreOrdine = new ConcreteCreatoreOrdine();
         this.prodottoRestController = new ProdottoRestController();
         this.negozioRestController = new NegozioRestController();
         this.prodotti = new ArrayList<>();
@@ -63,6 +64,12 @@ public class OrdineRestController {
 
     @PostMapping
     public OrdineEntity createOrdine(){
+        this.creatoreOrdine.setEmittente(this.negozioRestController.getNegozioById(this.negozioId));
+        return this.creatoreOrdine.creaOrdine();
+    }
+
+    /*@PostMapping
+    public OrdineEntity createOrdine(){
         this.creatoreOrdine = new ConcreteCreatoreOrdine();
         NegozioEntity n = this.negozioRestController.getNegozioById(this.negozioId);
         this.creatoreOrdine.setEmittente(n);
@@ -79,7 +86,7 @@ public class OrdineRestController {
         this.negozioRepository.save(n);
         resetParams();
         return ordine;
-    }
+    }*/
 
     @PostMapping("/setEmittente")
     public NegozioEntity setEmittenteOrdine(@RequestParam long idNegozio){
@@ -88,7 +95,7 @@ public class OrdineRestController {
         return n;
     }
 
-    @GetMapping("/setProdotto")
+    /*@GetMapping("/setProdotto")
     public String setProdottoOrdine(@RequestParam long idProdotto, @RequestParam int number){
         if(!this.negozioRestController.getNegozioById(this.negozioId).getProdotti()
                 .contains(prodottoRestController.getProdottoById(idProdotto))) return "prodotto con questo ID inesistente";
@@ -105,7 +112,18 @@ public class OrdineRestController {
         }
         this.prodotti.add(p1);
         return p1.toString();
-}
+    }*/
+    @GetMapping("/setProdotto")
+    public String setProdottoOrdine(@RequestParam long idProdotto, @RequestParam int number){
+        if(this.negozioRestController.getNegozioById(this.negozioId).getProdotti().stream()
+                .noneMatch(prodottoEntity -> prodottoEntity.getId()==idProdotto))return "prodotto con questo id non disponibile";
+        ProdottoEntity prodottoNegozio = this.negozioRestController.getProdottoById(this.negozioId,idProdotto);
+        ProdottoEntity prodottoOrdine = new ProdottoEntity(prodottoNegozio.getNome(),prodottoNegozio.getDescrizione(),
+                prodottoNegozio.getPrezzo());
+        prodottoOrdine.setSerialCode(prodottoNegozio.getSerialCode());
+        this.creatoreOrdine.addProdotto(prodottoOrdine,number);
+        return "prodotto inserito";
+    }
 
     @GetMapping("/setDestinazione")
     public LockerEntity setDestinazioneOrdine(@RequestParam long idDestinazione){
