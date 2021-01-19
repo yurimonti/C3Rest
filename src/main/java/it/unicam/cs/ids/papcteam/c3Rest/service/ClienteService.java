@@ -56,6 +56,7 @@ public class ClienteService {
             prodottoIn.setSerialCode(prodotto.getSerialCode());
             this.creatoreOrdine.addProdotto(prodottoIn,number);
         }
+        if(prodottoIn.getNumero()>prodotto.getNumero())throw new IllegalArgumentException("numero maggiore del disponibile");
         return prodottoIn;
     }
 
@@ -73,19 +74,32 @@ public class ClienteService {
         if(negozioRepository.findAll().stream().noneMatch(negozioEntity -> negozioEntity.getId()==creatoreOrdine.getEmittente().getId()))
             throw new NullPointerException("negozio inesistente");
         NegozioEntity negozioEntity = this.negozioRepository.getOne(creatoreOrdine.getEmittente().getId());
+        LockerEntity lockerEntity = this.lockerRepository.getOne(creatoreOrdine.getDestinazione().getId());
         creatoreOrdine.getProdotti().forEach(prodottoOrdine-> {
             negozioEntity.getProdotti().stream()
                     .filter(prodottoNegozio -> prodottoNegozio.getSerialCode()==prodottoOrdine.getSerialCode())
-                    .forEach(p -> p.setNumero(p.getNumero()-prodottoOrdine.getNumero()));
+                    .forEach(p -> {
+                        if(prodottoOrdine.getNumero()<=p.getNumero())
+                        p.setNumero(p.getNumero()-prodottoOrdine.getNumero());
+                        else throw new IllegalArgumentException("numero maggiore del disponibile");
+                    });
         });
         this.creatoreOrdine.setEmittente(negozioEntity);
+        this.creatoreOrdine.setDestinazione(lockerEntity);
         OrdineEntity ordine = this.creatoreOrdine.creaOrdine();
+        clearCreatore();
         cliente.getOrdini().add(ordine);
         this.negozioRepository.save(negozioEntity);
+        this.lockerRepository.save(lockerEntity);
         this.clienteRepository.save(cliente);
         return ordine;
     }
 
+    public void clearCreatore(){
+        this.creatoreOrdine.setEmittente(null);
+        this.creatoreOrdine.setDestinazione(null);
+        this.creatoreOrdine.getProdotti().clear();
+    }
 
 
 }

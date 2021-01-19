@@ -118,7 +118,8 @@ public class NegozioEntity implements PuntoRitiro {
                 ", descrizione='" + getDescrizione() + '\'' +
                 ", indirizzo='" + getIndirizzo() + '\'' +
                 ", orario='" + getOrario() + '\'' +
-                ", prodotti=" + getProdotti() +
+                ", prodotti=" + getProdotti() + '\'' +
+                ", ordini=" + getOrdini() +
                 '}';
     }
 
