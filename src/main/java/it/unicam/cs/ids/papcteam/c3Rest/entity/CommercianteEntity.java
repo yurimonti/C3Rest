@@ -3,6 +3,7 @@ package it.unicam.cs.ids.papcteam.c3Rest.entity;
 import javax.persistence.*;
 
 @Entity
+
 @Table(name = "commercianti")
 public class CommercianteEntity {
     private @Id
