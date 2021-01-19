@@ -1,10 +1,7 @@
 package it.unicam.cs.ids.papcteam.c3Rest.controller;
 
-import it.unicam.cs.ids.papcteam.c3Rest.entity.NegozioEntity;
-import it.unicam.cs.ids.papcteam.c3Rest.entity.ProdottoEntity;
+import it.unicam.cs.ids.papcteam.c3Rest.entity.*;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.ClienteRepository;
-import it.unicam.cs.ids.papcteam.c3Rest.entity.ClienteEntity;
-import it.unicam.cs.ids.papcteam.c3Rest.entity.OrdineEntity;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.NegozioRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.ProdottoRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.service.ClienteService;
@@ -32,6 +29,14 @@ public class ClienteRestController {
         if (Objects.isNull(n)) return "nessun Negozio con questo Id";
         else return n.toString();
     }
+
+    @PostMapping("/setDestinazione")
+    public String setDestinazioneOrdine(@RequestParam long idLocker){
+        LockerEntity l = this.clienteService.setDestinazioneOrdine(idLocker);
+        if (Objects.isNull(l)) return "nessun Negozio con questo Id";
+        else return l.toString();
+    }
+
 
     @PostMapping("/setProdotto")
     public String setProdottoOrdine(@RequestParam long idProdotto, @RequestParam int number){

@@ -1,14 +1,14 @@
 package it.unicam.cs.ids.papcteam.c3Rest.service;
 
-import it.unicam.cs.ids.papcteam.c3Rest.entity.ClienteEntity;
-import it.unicam.cs.ids.papcteam.c3Rest.entity.NegozioEntity;
-import it.unicam.cs.ids.papcteam.c3Rest.entity.OrdineEntity;
-import it.unicam.cs.ids.papcteam.c3Rest.entity.ProdottoEntity;
+import it.unicam.cs.ids.papcteam.c3Rest.entity.*;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.ClienteRepository;
+import it.unicam.cs.ids.papcteam.c3Rest.repository.LockerRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.NegozioRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.ProdottoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Scanner;
 
 @Service
 public class ClienteService {
@@ -18,6 +18,8 @@ public class ClienteService {
     private NegozioRepository negozioRepository;
     @Autowired
     private ProdottoRepository prodottoRepository;
+    @Autowired
+    private LockerRepository lockerRepository;
 
     private CreatoreOrdine creatoreOrdine;
 
@@ -31,6 +33,14 @@ public class ClienteService {
         NegozioEntity n = negozioRepository.getOne(idNegozio);
         this.creatoreOrdine.setEmittente(n);
         return n;
+    }
+
+    public LockerEntity setDestinazioneOrdine(long idLocker){
+        if (this.lockerRepository.findAll().stream().noneMatch(lockerEntity -> lockerEntity.getId()==idLocker))
+            throw new NullPointerException("id negozio inesistente");
+        LockerEntity l = lockerRepository.getOne(idLocker);
+        this.creatoreOrdine.setDestinazione(l);
+        return l;
     }
 
     public ProdottoEntity setProdottoOrdine(long idProdotto,int number){
