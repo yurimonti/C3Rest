@@ -27,8 +27,6 @@ public class ConcreteCreatoreOrdine implements CreatoreOrdine{
     }
     @Override
     public void setEmittente(NegozioEntity emittente) {
-        this.prodotti.clear();
-        this.destinazione=null;
         this.emittente = emittente;
     }
     @Override
@@ -83,14 +81,14 @@ public class ConcreteCreatoreOrdine implements CreatoreOrdine{
             o.setProdotti(this.prodotti);
             o.calcoloSoldi();
         }
-        this.clear();
+        //this.clear();
         return o;
     }
 
-    private void clear() {
+    /*private void clear() {
         setEmittente(null);
         setDestinazione(null);
         this.prodotti.clear();
-    }
+    }*/
 
 }

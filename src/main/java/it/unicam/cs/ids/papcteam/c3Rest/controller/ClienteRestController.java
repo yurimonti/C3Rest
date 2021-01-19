@@ -23,6 +23,12 @@ public class ClienteRestController {
     public ClienteRestController() {
     }
 
+    @PostMapping("/annullaOrdine")
+    public String clearOrdineInCorso(){
+        this.clienteService.clearCreatore();
+        return "ordine annullato";
+    }
+
     @PostMapping("/setEmittente")
     public String setEmittenteOrdine(@RequestParam long idNegozio){
         NegozioEntity n = this.clienteService.setEmittenteOrdine(idNegozio);
