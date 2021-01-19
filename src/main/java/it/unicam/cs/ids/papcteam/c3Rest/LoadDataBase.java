@@ -1,10 +1,8 @@
 package it.unicam.cs.ids.papcteam.c3Rest;
 
-import it.unicam.cs.ids.papcteam.c3Rest.entity.ClienteEntity;
-import it.unicam.cs.ids.papcteam.c3Rest.entity.NegozioEntity;
-import it.unicam.cs.ids.papcteam.c3Rest.entity.OrdineEntity;
-import it.unicam.cs.ids.papcteam.c3Rest.entity.ProdottoEntity;
+import it.unicam.cs.ids.papcteam.c3Rest.entity.*;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.ClienteRepository;
+import it.unicam.cs.ids.papcteam.c3Rest.repository.LockerRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.NegozioRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.OrdineRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -17,12 +15,14 @@ public class LoadDataBase {
     @Bean
     CommandLineRunner initDatabase(ClienteRepository clienteRepository,
                                    NegozioRepository negozioRepository,
-                                   OrdineRepository ordineRepository){
+                                   OrdineRepository ordineRepository,
+                                   LockerRepository lockerRepository){
         return args -> {
             ClienteEntity cliente = new ClienteEntity("Mario","Rossi","mario.rossi@gmail.com","mariorossi");
             cliente.initUsername();
             clienteRepository.save(cliente);
             NegozioEntity negozio = new NegozioEntity("ferramenta","ferramenta","Via Roma 10","Chiuso Sabato e Domenica");
+            lockerRepository.save(new LockerEntity("locker1","via mazzini 23","tutti i giorni dalle 8 alle 21"));
             ProdottoEntity p = new ProdottoEntity("vite","vite 5mm al pezzo",0.02,10);
             //p.setNumero(100);
             negozio.getProdotti().add(p);
