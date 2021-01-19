@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Random;
 
 @Entity
+
 @Table(name = "ordini")
 public class OrdineEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

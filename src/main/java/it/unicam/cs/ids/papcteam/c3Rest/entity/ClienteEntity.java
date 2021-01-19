@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+
 @Table(name = "clienti")
 public class ClienteEntity {
     private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) long id;

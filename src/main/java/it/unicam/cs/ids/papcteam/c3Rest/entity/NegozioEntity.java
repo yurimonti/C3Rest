@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
+
 @Table(name = "negozi")
 public class NegozioEntity implements PuntoRitiro {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+
 @Table(name = "lockers")
 public class LockerEntity implements PuntoRitiro {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
