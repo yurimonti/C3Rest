@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RegisterService {
+public class RegistrationService {
     @Autowired
     private ClienteRepository clienteRepository;
     @Autowired
@@ -18,7 +18,7 @@ public class RegisterService {
     @Autowired
     private CorriereRepository corriereRepository;
 
-    public RegisterService(){}
+    public RegistrationService(){}
 
     public void createCliente(String nome, String cognome, String email, String password){
         ClienteEntity cl = new ClienteEntity(nome,cognome,email,password);
