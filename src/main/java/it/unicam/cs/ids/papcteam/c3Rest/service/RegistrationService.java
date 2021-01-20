@@ -34,7 +34,7 @@ public class RegistrationService {
     }
 
     public void register(String nome, String cognome, String email, String password,String type){
-        UserType u = UserType.valueOf(type.toUpperCase());
+        MyUserType u = MyUserType.valueOf(type.toUpperCase());
         switch (u) {
             case CLIENTE: createCliente(nome,cognome,email,password);break;
             case CORRIERE: createCorriere(nome,cognome,email,password);break;

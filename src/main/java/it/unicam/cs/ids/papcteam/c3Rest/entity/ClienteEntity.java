@@ -8,7 +8,8 @@ import java.util.List;
 
 @Table(name = "clienti")
 public class ClienteEntity {
-    private @Id @GeneratedValue(strategy = GenerationType.IDENTITY) long id;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Column(name = "email")
     private String email;

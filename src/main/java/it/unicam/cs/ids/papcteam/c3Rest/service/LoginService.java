@@ -47,7 +47,7 @@ public class LoginService {
 
     public long getUserId(String userType,String email,String password){
         long id=0;
-        UserType u = UserType.valueOf(userType.toUpperCase());
+        MyUserType u = MyUserType.valueOf(userType.toUpperCase());
         switch (u){
             case CLIENTE:id = getClienteId(email,password);
             break;

@@ -1,7 +1,7 @@
 package it.unicam.cs.ids.papcteam.c3Rest.service;
 
 
-public enum UserType {
+public enum MyUserType {
         CLIENTE,COMMERCIANTE,CORRIERE;
 }
 
