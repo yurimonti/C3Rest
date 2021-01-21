@@ -2,6 +2,7 @@ package it.unicam.cs.ids.papcteam.c3Rest.controller;
 
 import it.unicam.cs.ids.papcteam.c3Rest.entity.LockerEntity;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.LockerRepository;
+import it.unicam.cs.ids.papcteam.c3Rest.service.LockerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +16,14 @@ import java.util.List;
 @RequestMapping("/lockers")
 public class LockerRestController {
     @Autowired
-    private LockerRepository lockerRepository;
+    private LockerService lockerService;
 
     public LockerRestController() {
     }
 
     @GetMapping
     public List<LockerEntity> getLockers(){
-        return this.lockerRepository.findAll();
+        return this.lockerService.getLockers();
     }
+
 }

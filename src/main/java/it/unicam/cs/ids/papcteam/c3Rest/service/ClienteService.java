@@ -10,6 +10,9 @@ import it.unicam.cs.ids.papcteam.c3Rest.util.CreatoreOrdine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ClienteService {
     @Autowired
@@ -25,6 +28,19 @@ public class ClienteService {
 
     public ClienteService() {
         this.creatoreOrdine = new ConcreteCreatoreOrdine();
+    }
+
+    public List<OrdineEntity> getOrdiniCliente(long id){
+        return getClienteById(id).getOrdini();
+    }
+
+    public List<OrdineEntity> getOrdiniNonCompletati(long id){
+        return getOrdiniCliente(id).stream().filter(o ->o.getStatoOrdine()!=StatoOrdine.COMPLETATO).collect(Collectors.toList());
+    }
+
+    public List<OrdineEntity> getOrdiniDaRitirare(long id){
+        return getOrdiniCliente(id).stream().filter(o ->o.getStatoOrdine()==StatoOrdine.CONSEGNATO||
+                o.getStatoOrdine()==StatoOrdine.RITIRO_NEGOZIO).collect(Collectors.toList());
     }
 
     public NegozioEntity setEmittenteOrdine(long idNegozio){
@@ -74,7 +90,13 @@ public class ClienteService {
         if(negozioRepository.findAll().stream().noneMatch(negozioEntity -> negozioEntity.getId()==creatoreOrdine.getEmittente().getId()))
             throw new NullPointerException("negozio inesistente");
         NegozioEntity negozioEntity = this.negozioRepository.getOne(creatoreOrdine.getEmittente().getId());
-        LockerEntity lockerEntity = this.lockerRepository.getOne(creatoreOrdine.getDestinazione().getId());
+        LockerEntity lockerEntity;
+        if(creatoreOrdine.getDestinazione()!=null){
+            lockerEntity = this.lockerRepository.getOne(creatoreOrdine.getDestinazione().getId());
+            this.creatoreOrdine.setDestinazione(lockerEntity);
+            this.lockerRepository.save(lockerEntity);
+        }
+
         creatoreOrdine.getProdotti().forEach(prodottoOrdine-> {
             negozioEntity.getProdotti().stream()
                     .filter(prodottoNegozio -> prodottoNegozio.getSerialCode()==prodottoOrdine.getSerialCode())
@@ -85,12 +107,11 @@ public class ClienteService {
                     });
         });
         this.creatoreOrdine.setEmittente(negozioEntity);
-        this.creatoreOrdine.setDestinazione(lockerEntity);
         OrdineEntity ordine = this.creatoreOrdine.creaOrdine();
         clearCreatore();
         cliente.getOrdini().add(ordine);
         this.negozioRepository.save(negozioEntity);
-        this.lockerRepository.save(lockerEntity);
+
         this.clienteRepository.save(cliente);
         return ordine;
     }
@@ -100,6 +121,4 @@ public class ClienteService {
         this.creatoreOrdine.setDestinazione(null);
         this.creatoreOrdine.getProdotti().clear();
     }
-
-
 }
