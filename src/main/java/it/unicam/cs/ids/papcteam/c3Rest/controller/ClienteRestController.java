@@ -1,16 +1,9 @@
 package it.unicam.cs.ids.papcteam.c3Rest.controller;
 
 import it.unicam.cs.ids.papcteam.c3Rest.entity.*;
-import it.unicam.cs.ids.papcteam.c3Rest.repository.ClienteRepository;
-import it.unicam.cs.ids.papcteam.c3Rest.repository.NegozioRepository;
-import it.unicam.cs.ids.papcteam.c3Rest.repository.ProdottoRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.service.ClienteService;
-import it.unicam.cs.ids.papcteam.c3Rest.service.ConcreteCreatoreOrdine;
-import it.unicam.cs.ids.papcteam.c3Rest.service.CreatoreOrdine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.Objects;
 
 @RestController

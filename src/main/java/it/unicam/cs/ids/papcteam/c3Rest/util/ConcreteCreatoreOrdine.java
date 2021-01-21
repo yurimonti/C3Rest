@@ -1,11 +1,10 @@
-package it.unicam.cs.ids.papcteam.c3Rest.service;
+package it.unicam.cs.ids.papcteam.c3Rest.util;
 
 import it.unicam.cs.ids.papcteam.c3Rest.entity.LockerEntity;
 import it.unicam.cs.ids.papcteam.c3Rest.entity.NegozioEntity;
 import it.unicam.cs.ids.papcteam.c3Rest.entity.OrdineEntity;
 import it.unicam.cs.ids.papcteam.c3Rest.entity.ProdottoEntity;
 
-import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;

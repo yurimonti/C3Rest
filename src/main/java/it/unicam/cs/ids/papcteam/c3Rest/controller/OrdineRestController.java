@@ -7,8 +7,8 @@ import it.unicam.cs.ids.papcteam.c3Rest.entity.ProdottoEntity;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.LockerRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.NegozioRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.OrdineRepository;
-import it.unicam.cs.ids.papcteam.c3Rest.service.ConcreteCreatoreOrdine;
-import it.unicam.cs.ids.papcteam.c3Rest.service.CreatoreOrdine;
+import it.unicam.cs.ids.papcteam.c3Rest.util.ConcreteCreatoreOrdine;
+import it.unicam.cs.ids.papcteam.c3Rest.util.CreatoreOrdine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

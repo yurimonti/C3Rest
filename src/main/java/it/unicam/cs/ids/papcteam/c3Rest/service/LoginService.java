@@ -3,6 +3,7 @@ package it.unicam.cs.ids.papcteam.c3Rest.service;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.ClienteRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.CommercianteRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.CorriereRepository;
+import it.unicam.cs.ids.papcteam.c3Rest.util.MyUserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,7 +48,7 @@ public class LoginService {
 
     public long getUserId(String userType,String email,String password){
         long id=0;
-        UserType u = UserType.valueOf(userType.toUpperCase());
+        MyUserType u = MyUserType.valueOf(userType.toUpperCase());
         switch (u){
             case CLIENTE:id = getClienteId(email,password);
             break;

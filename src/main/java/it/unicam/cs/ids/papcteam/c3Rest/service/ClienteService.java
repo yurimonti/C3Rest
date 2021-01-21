@@ -5,10 +5,10 @@ import it.unicam.cs.ids.papcteam.c3Rest.repository.ClienteRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.LockerRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.NegozioRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.ProdottoRepository;
+import it.unicam.cs.ids.papcteam.c3Rest.util.ConcreteCreatoreOrdine;
+import it.unicam.cs.ids.papcteam.c3Rest.util.CreatoreOrdine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Scanner;
 
 @Service
 public class ClienteService {

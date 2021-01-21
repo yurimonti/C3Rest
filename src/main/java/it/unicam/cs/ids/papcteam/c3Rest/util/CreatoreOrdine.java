@@ -1,4 +1,4 @@
-package it.unicam.cs.ids.papcteam.c3Rest.service;
+package it.unicam.cs.ids.papcteam.c3Rest.util;
 
 import it.unicam.cs.ids.papcteam.c3Rest.entity.LockerEntity;
 import it.unicam.cs.ids.papcteam.c3Rest.entity.NegozioEntity;
