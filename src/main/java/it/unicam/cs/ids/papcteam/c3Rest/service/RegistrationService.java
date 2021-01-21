@@ -30,7 +30,7 @@ public class RegistrationService {
 
     private void createCliente(String nome, String cognome, String email, String password){
         ClienteEntity cl = new ClienteEntity(nome,cognome,email,password);
-        clienteRepository.save(cl);
+        this.clienteRepository.save(cl);
     }
     /*public void createCommerciante(String nome, String cognome, String email, String password){
         CommercianteEntity cl = new CommercianteEntity(nome,cognome,email,password);
@@ -38,7 +38,7 @@ public class RegistrationService {
     }*/
     private void createCorriere(String nome, String cognome, String email, String password){
         CorriereEntity cl = new CorriereEntity(nome,cognome,email,password);
-        corriereRepository.save(cl);
+        this.corriereRepository.save(cl);
     }
 
     public void register(String nome, String cognome, String email, String password,String type){
