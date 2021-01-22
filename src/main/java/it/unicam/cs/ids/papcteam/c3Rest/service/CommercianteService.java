@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 public class CommercianteService {
     @Autowired
     private CommercianteRepository commercianteRepository;
-    /*@Autowired
-    private NegozioRepository negozioRepository;*/
     @Autowired
     private OrdineRepository ordineRepository;
     @Autowired
