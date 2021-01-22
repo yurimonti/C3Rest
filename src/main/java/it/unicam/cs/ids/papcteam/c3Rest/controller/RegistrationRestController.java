@@ -25,9 +25,9 @@ public class RegistrationRestController {
                 new NegozioEntity(nomeNegozio,descrizione,indirizzo,orario));
     }
 
-    @PostMapping
+    @PostMapping("/registrationCliCor")
     public void register(@RequestParam String nome, @RequestParam String cognome,
                          @RequestParam String email,@RequestParam String password,@RequestParam String type){
-        registrationService.register(nome,cognome,email,password,type);
+        this.registrationService.register(nome,cognome,email,password,type);
     }
 }
