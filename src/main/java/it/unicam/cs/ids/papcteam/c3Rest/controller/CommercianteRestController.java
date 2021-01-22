@@ -1,12 +1,15 @@
 package it.unicam.cs.ids.papcteam.c3Rest.controller;
 
 import it.unicam.cs.ids.papcteam.c3Rest.entity.CommercianteEntity;
+import it.unicam.cs.ids.papcteam.c3Rest.entity.NegozioEntity;
 import it.unicam.cs.ids.papcteam.c3Rest.entity.OrdineEntity;
+import it.unicam.cs.ids.papcteam.c3Rest.entity.StatoOrdine;
 import it.unicam.cs.ids.papcteam.c3Rest.service.CommercianteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/commercianti")
@@ -23,6 +26,11 @@ public class CommercianteRestController {
         return this.commercianteService.getCommercianteById(id);
     }
 
+    @GetMapping("/{id}/negozio")
+    public NegozioEntity getNegozioCommerciante(@PathVariable long id){
+        return getCommercinateById(id).getNegozio();
+    }
+
 
     /*@PatchMapping("/{id}")
     public void setNegozioAssociato(@PathVariable long id,@RequestParam long idNegozio){
@@ -31,7 +39,23 @@ public class CommercianteRestController {
 
     @GetMapping("/{id}/ordiniInNegozio")
     public List<OrdineEntity> getOrdiniCommerciante(@PathVariable long id){
-        return this.commercianteService.getOrdiniCommerciante(id);
+        return this.commercianteService.getOrdiniCommerciante(id,o->true);
+    }
+    @GetMapping("/{id}/ordiniInNegozioPerRitiro")
+    public List<OrdineEntity> getOrdiniCommercianteInRitiro(@PathVariable long id){
+        return this.commercianteService.getOrdiniCommerciante(id,ordineEntity ->
+                ordineEntity.getStatoOrdine()== StatoOrdine.RITIRO_NEGOZIO);
+    }
+    @GetMapping("/{id}/ordiniInNegozioNonCompletati")
+    public List<OrdineEntity> getOrdiniCommercianteNonCompletati(@PathVariable long id){
+        return this.commercianteService.getOrdiniCommerciante(id,ordineEntity ->
+                ordineEntity.getStatoOrdine()!= StatoOrdine.COMPLETATO);
+    }
+
+    @GetMapping("/{id}/ordiniDaSoddisfare")
+    public List<OrdineEntity> getOrdiniDaSoddisfare(@PathVariable long id){
+        return this.commercianteService.getOrdiniCommerciante(id,ordineEntity ->
+                ordineEntity.getStatoOrdine()==StatoOrdine.ESEGUITO);
     }
 
     @PostMapping("/{id}/inviaChiamata")

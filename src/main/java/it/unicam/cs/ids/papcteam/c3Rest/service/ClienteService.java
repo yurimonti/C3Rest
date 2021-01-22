@@ -1,10 +1,7 @@
 package it.unicam.cs.ids.papcteam.c3Rest.service;
 
 import it.unicam.cs.ids.papcteam.c3Rest.entity.*;
-import it.unicam.cs.ids.papcteam.c3Rest.repository.ClienteRepository;
-import it.unicam.cs.ids.papcteam.c3Rest.repository.LockerRepository;
-import it.unicam.cs.ids.papcteam.c3Rest.repository.NegozioRepository;
-import it.unicam.cs.ids.papcteam.c3Rest.repository.ProdottoRepository;
+import it.unicam.cs.ids.papcteam.c3Rest.repository.*;
 import it.unicam.cs.ids.papcteam.c3Rest.util.ConcreteCreatoreOrdine;
 import it.unicam.cs.ids.papcteam.c3Rest.util.CreatoreOrdine;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +20,8 @@ public class ClienteService {
     private ProdottoRepository prodottoRepository;
     @Autowired
     private LockerRepository lockerRepository;
+    @Autowired
+    private OrdineRepository ordiniRepository;
 
     private CreatoreOrdine creatoreOrdine;
 
@@ -91,12 +90,6 @@ public class ClienteService {
             throw new NullPointerException("negozio inesistente");
         NegozioEntity negozioEntity = this.negozioRepository.getOne(creatoreOrdine.getEmittente().getId());
         LockerEntity lockerEntity;
-        if(creatoreOrdine.getDestinazione()!=null){
-            lockerEntity = this.lockerRepository.getOne(creatoreOrdine.getDestinazione().getId());
-            this.creatoreOrdine.setDestinazione(lockerEntity);
-            this.lockerRepository.save(lockerEntity);
-        }
-
         creatoreOrdine.getProdotti().forEach(prodottoOrdine-> {
             negozioEntity.getProdotti().stream()
                     .filter(prodottoNegozio -> prodottoNegozio.getSerialCode()==prodottoOrdine.getSerialCode())
@@ -107,11 +100,15 @@ public class ClienteService {
                     });
         });
         this.creatoreOrdine.setEmittente(negozioEntity);
+        if(creatoreOrdine.getDestinazione()!=null){
+            lockerEntity = this.lockerRepository.getOne(creatoreOrdine.getDestinazione().getId());
+            this.creatoreOrdine.setDestinazione(lockerEntity);
+            this.lockerRepository.save(lockerEntity);
+        }
         OrdineEntity ordine = this.creatoreOrdine.creaOrdine();
         clearCreatore();
         cliente.getOrdini().add(ordine);
         this.negozioRepository.save(negozioEntity);
-
         this.clienteRepository.save(cliente);
         return ordine;
     }
