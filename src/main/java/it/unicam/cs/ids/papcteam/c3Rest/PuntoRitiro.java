@@ -7,5 +7,5 @@ public interface PuntoRitiro {
     String getIndirizzo();
     String getOrario();
     String getNome();
-    List<OrdineEntity> getOrdini();
+    //List<OrdineEntity> getOrdini();
 }
