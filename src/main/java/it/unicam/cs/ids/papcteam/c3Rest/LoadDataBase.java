@@ -11,11 +11,10 @@ public class LoadDataBase {
 
     @Bean
     CommandLineRunner initDatabase(ClienteRepository clienteRepository,
-                                   NegozioRepository negozioRepository,
                                    LockerRepository lockerRepository,
                                    CommercianteRepository commercianteRepository){
         return args -> {
-            ClienteEntity cliente = new ClienteEntity("Mario","Rossi","mario.rossi@gmail.com","mariorossi");
+            ClienteEntity cliente = new ClienteEntity("a","a","a@gmail.com","a");
             cliente.initUsername();
             clienteRepository.save(cliente);
             /*CommercianteEntity commercianteEntity = new CommercianteEntity("matteo","minzi",
@@ -32,10 +31,11 @@ public class LoadDataBase {
             CommercianteEntity commercianteEntity = new CommercianteEntity("matteo","minzi",
                     "mm@gmail.com","1234");
             commercianteEntity.initUsername();
-            commercianteEntity.setNegozio(new NegozioEntity("ferramenta","ferramenta",
-                    "Via Roma 10","Chiuso Sabato e Domenica"));
+            NegozioEntity negozio = new NegozioEntity("ferramenta","ferramenta","Via Roma 10","Chiuso Sabato e Domenica");
+            negozio.getProdotti().add(new ProdottoEntity("vite","vite 5mm al pezzo",0.02,10));
+            commercianteEntity.setNegozio(negozio);
             commercianteRepository.save(commercianteEntity);
-
+            lockerRepository.save(new LockerEntity("locker1","via mazzini 23","tutti i giorni dalle 8 alle 21"));
         };
     }
 

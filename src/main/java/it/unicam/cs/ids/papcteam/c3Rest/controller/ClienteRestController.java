@@ -2,8 +2,12 @@ package it.unicam.cs.ids.papcteam.c3Rest.controller;
 
 import it.unicam.cs.ids.papcteam.c3Rest.entity.*;
 import it.unicam.cs.ids.papcteam.c3Rest.service.ClienteService;
+import it.unicam.cs.ids.papcteam.c3Rest.service.LockerService;
+import it.unicam.cs.ids.papcteam.c3Rest.service.OrdineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -12,6 +16,8 @@ import java.util.Objects;
 public class ClienteRestController {
     @Autowired
     private ClienteService clienteService;
+    @Autowired
+    private OrdineService ordineService;
 
     public ClienteRestController() {
     }
@@ -51,102 +57,27 @@ public class ClienteRestController {
         else return o.toString();
     }
 
-    /*@Autowired
-    private ClienteRepository clienteRepository;
-    @Autowired
-    private NegozioRepository negozioRepository;
-    @Autowired
-    private ProdottoRepository prodottoRepository;
-
-    private CreatoreOrdine creatoreOrdine;
-
-    public ClienteRestController() {
-        this.creatoreOrdine = new ConcreteCreatoreOrdine();
-    }
-
-    @PostMapping("/setEmittente")
-    public String setEmittenteOrdine(@RequestParam long idNegozio){
-        if (this.negozioRepository.findAll().stream().noneMatch(negozioEntity -> negozioEntity.getId()==idNegozio))
-            throw new NullPointerException("id negozio inesistente");
-        NegozioEntity n = negozioRepository.getOne(idNegozio);
-        this.creatoreOrdine.setEmittente(n);
-        return n.toString();
-    }*/
-
-    /*@PostMapping("/setProdotto")
-    public String setProdottoOrdine(@RequestParam long idProdotto, @RequestParam int number){
-        if(this.creatoreOrdine.getEmittente().getProdotti().stream().noneMatch(prodottoEntity -> prodottoEntity.getId()==idProdotto))
-            return "nessun Prodotto con questo Id";
-        ProdottoEntity prodotto = this.prodottoRepository.getOne(idProdotto);
-        ProdottoEntity prodottoIn;
-        if(this.creatoreOrdine.getProdotti().stream().anyMatch(prodottoEntity -> prodottoEntity.getSerialCode()==prodotto.getSerialCode())){
-            prodottoIn = this.creatoreOrdine.getProdottoBySerialCode(prodotto.getSerialCode());
-            prodottoIn.setNumero(prodottoIn.getNumero()+number);
-        }else {
-            prodottoIn = new ProdottoEntity(prodotto.getNome(),prodotto.getDescrizione(),prodotto.getPrezzo());
-            prodottoIn.setSerialCode(prodotto.getSerialCode());
-            this.creatoreOrdine.addProdotto(prodottoIn,number);
-        }
-        return prodottoIn.toString();
-    }
-
-    *//*@PostMapping("/setProdotto")
-    public String setProdottoOrdine(@RequestParam long idProdotto, @RequestParam int number){
-        if(this.negozioRepository.getOne(this.creatoreOrdine.getEmittente().getId()).getProdotti().stream()
-                .noneMatch(prodottoEntity -> prodottoEntity.getId()==idProdotto))return "prodotto con questo id non disponibile";
-        ProdottoEntity prodottoNegozio = this.creatoreOrdine.getEmittente().getProdotti().stream()
-                .filter(prodottoEntity -> prodottoEntity.getId()==idProdotto).findFirst().orElseThrow();
-        ProdottoEntity prodottoOrdine = new ProdottoEntity(prodottoNegozio.getNome(),prodottoNegozio.getDescrizione(),
-                prodottoNegozio.getPrezzo());
-        prodottoOrdine.setSerialCode(prodottoNegozio.getSerialCode());
-        this.creatoreOrdine.addProdotto(prodottoOrdine,number);
-        return "prodotto inserito";
-    }*//*
-
-    @PostMapping("/{id}/aggiungiOrdine")
-    public List<OrdineEntity> addOrdineToCliente(@PathVariable long id){
-        if (this.clienteRepository.findAll().stream().noneMatch(clienteEntity -> clienteEntity.getId()==id))
-            throw new NullPointerException("cliente con questo id inesistente");
-        ClienteEntity cliente = getClienteById(id);
-        if(negozioRepository.findAll().stream().noneMatch(negozioEntity -> negozioEntity.getId()==creatoreOrdine.getEmittente().getId()))
-            throw new NullPointerException("negozio inesistente");
-        NegozioEntity negozioEntity = this.negozioRepository.getOne(creatoreOrdine.getEmittente().getId());
-        creatoreOrdine.getProdotti().forEach(prodottoOrdine-> {
-            negozioEntity.getProdotti().stream()
-                    .filter(prodottoNegozio -> prodottoNegozio.getSerialCode()==prodottoOrdine.getSerialCode())
-                    .forEach(p -> p.setNumero(p.getNumero()-prodottoOrdine.getNumero()));
-        });
-        this.creatoreOrdine.setEmittente(negozioEntity);
-        OrdineEntity ordine = this.creatoreOrdine.creaOrdine();
-        cliente.getOrdini().add(ordine);
-        this.negozioRepository.save(negozioEntity);
-        this.clienteRepository.save(cliente);
-        return cliente.getOrdini();
-    }
-
-    @GetMapping("/{id}")
-    public ClienteEntity getClienteById(@PathVariable long id){
-        return this.clienteRepository.getOne(id);
-    }
-
-
-    @GetMapping
-    public List<ClienteEntity> getClienti(){
-        return this.clienteRepository.findAll();
-    }
-
     @GetMapping("/{id}/ordini")
-    public List<OrdineEntity> getOrdini(@PathVariable long id){
-        return clienteRepository.getOne(id).getOrdini();
+    public List<OrdineEntity> getOrdiniCliente(@PathVariable long id){
+        return this.clienteService.getOrdiniCliente(id);
     }
-    @PostMapping
-    public void createCliente(@RequestBody ClienteEntity cliente){
-        cliente.initUsername();
-        clienteRepository.save(cliente);
-    }
-    @DeleteMapping("/{id}")
-    public void deleteCliente(@RequestParam long id){
-        clienteRepository.deleteById(id);
-    }*/
 
+    @GetMapping("/{id}/ordiniNonCompletati")
+    public List<OrdineEntity> getOrdiniClienteNonCompletati(@PathVariable long id){
+        return this.clienteService.getOrdiniNonCompletati(id);
+    }
+    @GetMapping("/{id}/ordiniDaRitirare")
+    public List<OrdineEntity> getOrdiniClienteDaRitirare(@PathVariable long id) {
+        return this.clienteService.getOrdiniDaRitirare(id);
+    }
+
+    @PatchMapping("/{id}/ritiraOrdine/{idOrdine}")
+    public String ritiraOrdine(@PathVariable long id,@PathVariable long idOrdine){
+        if(!this.clienteService.getClienteById(id).getOrdini().contains(this.ordineService.getOrdineById(idOrdine)))
+            return "ordine con questo id inesistente";
+        else {
+            this.ordineService.ritiraOrdine(idOrdine);
+            return "ordine ritirato";
+        }
+    }
 }
