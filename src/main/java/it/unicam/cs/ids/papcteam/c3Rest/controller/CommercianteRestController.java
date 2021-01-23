@@ -1,9 +1,6 @@
 package it.unicam.cs.ids.papcteam.c3Rest.controller;
 
-import it.unicam.cs.ids.papcteam.c3Rest.entity.CommercianteEntity;
-import it.unicam.cs.ids.papcteam.c3Rest.entity.NegozioEntity;
-import it.unicam.cs.ids.papcteam.c3Rest.entity.OrdineEntity;
-import it.unicam.cs.ids.papcteam.c3Rest.entity.StatoOrdine;
+import it.unicam.cs.ids.papcteam.c3Rest.entity.*;
 import it.unicam.cs.ids.papcteam.c3Rest.service.CommercianteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,10 +29,10 @@ public class CommercianteRestController {
     }
 
 
-    /*@PatchMapping("/{id}")
-    public void setNegozioAssociato(@PathVariable long id,@RequestParam long idNegozio){
-        this.commercianteService.setNegozioAssociato(id,idNegozio);
-    }*/
+    @GetMapping("/{id}/prodotti")
+    public List<ProdottoEntity> getProdottiNegozio(@PathVariable long id){
+        return this.commercianteService.getProdottiNegozio(id);
+    }
 
     @GetMapping("/{id}/ordiniInNegozio")
     public List<OrdineEntity> getOrdiniCommerciante(@PathVariable long id){
