@@ -20,11 +20,11 @@ public class LockerEntity implements PuntoRitiro {
     private String indirizzo;
     @Column(name = "orario")
     private String orario;
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<OrdineEntity> ordini;
+    /*@OneToMany(cascade = CascadeType.ALL)
+    private List<OrdineEntity> ordini;*/
 
     public LockerEntity() {
-        this.ordini = new ArrayList<>();
+        //this.ordini = new ArrayList<>();
     }
 
     public LockerEntity(String nome, String indirizzo, String orario) {
@@ -53,22 +53,22 @@ public class LockerEntity implements PuntoRitiro {
         return this.nome;
     }
 
-    @Override
+    /*@Override
     public List<OrdineEntity> getOrdini() {
         return this.ordini;
-    }
+    }*/
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LockerEntity that = (LockerEntity) o;
-        return id == that.id && nome.equals(that.nome) && indirizzo.equals(that.indirizzo) && orario.equals(that.orario) && ordini.equals(that.ordini);
+        return id == that.id && nome.equals(that.nome) && indirizzo.equals(that.indirizzo) && orario.equals(that.orario)/* && ordini.equals(that.ordini)*/;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nome, indirizzo, orario, ordini);
+        return Objects.hash(id, nome, indirizzo, orario/*, ordini*/);
     }
 
     @Override
@@ -77,8 +77,8 @@ public class LockerEntity implements PuntoRitiro {
                 "id=" + id +
                 ", nome='" + nome + '\'' +
                 ", indirizzo='" + indirizzo + '\'' +
-                ", orario='" + orario + '\'' +
-                ", ordini=" + ordini +
+                ", orario='" + orario +/* '\'' +
+                ", ordini=" + ordini +*/
                 '}';
     }
 }
