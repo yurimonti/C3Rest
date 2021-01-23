@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 public class CommercianteService {
     @Autowired
     private CommercianteRepository commercianteRepository;
-    /*@Autowired
-    private NegozioRepository negozioRepository;*/
     @Autowired
     private OrdineRepository ordineRepository;
     @Autowired
@@ -30,18 +28,9 @@ public class CommercianteService {
             return this.commercianteRepository.getOne(id);
     }
 
-    /*public void addNegozio(long id,String name,String descrizione,String indirizzo,String orario){
-        CommercianteEntity commercianteEntity = getCommercianteById(id);
-        NegozioEntity negozioEntity = new NegozioEntity(name,descrizione,indirizzo,orario);
-        negozioEntity.setId(commercianteEntity.getId());
-        this.negozioRepository.save(negozioEntity);
+    public List<ProdottoEntity> getProdottiNegozio(long id){
+        return getCommercianteById(id).getNegozio().getProdotti();
     }
-
-    public void setNegozioAssociato(long id){
-        CommercianteEntity commerciante = getCommercianteById(id);
-        commerciante.setNegozio(this.negozioRepository.getOne(id));
-        this.commercianteRepository.save(commerciante);
-    }*/
 
     public List<OrdineEntity> getOrdiniCommerciante(long id,Predicate<OrdineEntity> predicate){
         return this.ordineRepository.findAll().stream().filter(ordineEntity ->
