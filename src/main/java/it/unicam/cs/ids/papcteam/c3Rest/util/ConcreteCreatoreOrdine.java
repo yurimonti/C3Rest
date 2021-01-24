@@ -36,15 +36,23 @@ public class ConcreteCreatoreOrdine implements CreatoreOrdine{
     @Override
     public void addProdotto(ProdottoEntity prodotto, int numero){
         Predicate<ProdottoEntity> predicate = prodottoEntity -> prodottoEntity.getSerialCode()==prodotto.getSerialCode();
+        ProdottoEntity prodottoNegozio = getEmittente().getProdotti().stream().filter(predicate)
+                .findFirst().orElseThrow(NullPointerException::new);
         if (this.prodotti.stream().anyMatch(predicate)){
             ProdottoEntity prodottoIn = this.prodotti.stream().filter(predicate).findFirst().orElseThrow(NullPointerException::new);
             prodottoIn.setNumero(prodottoIn.getNumero()+numero);
-            this.prodotti.add(prodottoIn);
+            if (prodottoIn.getNumero()>prodottoNegozio.getNumero())
+                throw new IllegalArgumentException("numero superiore da quello disponibile");
+            //this.prodotti.add(prodottoIn);
         } else{
             prodotto.setNumero(numero);
+            if (prodotto.getNumero()>prodottoNegozio.getNumero())
+                throw new IllegalArgumentException("numero superiore da quello disponibile");
             this.prodotti.add(prodotto);
         }
     }
+
+
 
     @Override
     public LockerEntity getDestinazione(){
@@ -80,8 +88,15 @@ public class ConcreteCreatoreOrdine implements CreatoreOrdine{
             o.setProdotti(this.prodotti);
             o.calcoloSoldi();
         }
+        gestisciProdottoEmittente();
         //this.clear();
         return o;
+    }
+    private void gestisciProdottoEmittente(){
+        for (ProdottoEntity prodottoOrdine: getProdotti()) {
+            getEmittente().getProdotti().stream().filter(p-> p.getSerialCode()==prodottoOrdine.getSerialCode())
+                    .forEach(p -> p.setNumero(p.getNumero()-prodottoOrdine.getNumero()));
+        }
     }
 
     /*private void clear() {
