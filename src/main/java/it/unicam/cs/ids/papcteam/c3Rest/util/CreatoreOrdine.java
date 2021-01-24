@@ -24,4 +24,5 @@ public interface CreatoreOrdine {
     OrdineEntity creaOrdine();
     NegozioEntity getEmittente();
 
+    void gestisciProdottoEmittente();
 }

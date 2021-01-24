@@ -1,8 +1,8 @@
 package it.unicam.cs.ids.papcteam.c3Rest.controller;
 
 import it.unicam.cs.ids.papcteam.c3Rest.entity.*;
+import it.unicam.cs.ids.papcteam.c3Rest.repository.ProdottoRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.service.ClienteService;
-import it.unicam.cs.ids.papcteam.c3Rest.service.LockerService;
 import it.unicam.cs.ids.papcteam.c3Rest.service.OrdineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +18,8 @@ public class ClienteRestController {
     private ClienteService clienteService;
     @Autowired
     private OrdineService ordineService;
+    @Autowired
+    private ProdottoRepository prodottoRepository;
 
     public ClienteRestController() {
     }
@@ -45,9 +47,17 @@ public class ClienteRestController {
 
     @PostMapping("/setProdotto")
     public String setProdottoOrdine(@RequestParam long idProdotto, @RequestParam int number){
+        String s ="";
         ProdottoEntity p = this.clienteService.setProdottoOrdine(idProdotto,number);
-        if(Objects.isNull(p)) return "nessun Prodotto con questo Id";
-        else return p.toString();
+        if(Objects.isNull(p)) s= "nessun Prodotto con questo Id";
+        else {
+            if(p.getNumero()>this.prodottoRepository.getOne(idProdotto).getNumero()){
+                s = "numero superiore da quello disponibile";
+                clearOrdineInCorso();
+            }else
+            s = p.toString();
+        }
+        return s;
     }
 
     @PostMapping("/{id}/aggiungiOrdine")

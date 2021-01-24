@@ -84,15 +84,16 @@ public class ConcreteCreatoreOrdine implements CreatoreOrdine{
         else {
             o.setEmittente(this.emittente);
         }
+        gestisciProdottoEmittente();
         if(!this.prodotti.isEmpty()) {
             o.setProdotti(this.prodotti);
             o.calcoloSoldi();
         }
-        gestisciProdottoEmittente();
         //this.clear();
         return o;
     }
-    private void gestisciProdottoEmittente(){
+    @Override
+    public void gestisciProdottoEmittente(){
         for (ProdottoEntity prodottoOrdine: getProdotti()) {
             getEmittente().getProdotti().stream().filter(p-> p.getSerialCode()==prodottoOrdine.getSerialCode())
                     .forEach(p -> p.setNumero(p.getNumero()-prodottoOrdine.getNumero()));
