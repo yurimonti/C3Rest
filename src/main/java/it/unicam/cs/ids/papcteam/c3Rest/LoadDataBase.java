@@ -12,11 +12,15 @@ public class LoadDataBase {
     @Bean
     CommandLineRunner initDatabase(ClienteRepository clienteRepository,
                                    LockerRepository lockerRepository,
-                                   CommercianteRepository commercianteRepository){
+                                   CommercianteRepository commercianteRepository,
+                                   CorriereRepository corriereRepository){
         return args -> {
             ClienteEntity cliente = new ClienteEntity("a","a","a@gmail.com","a");
             cliente.initUsername();
             clienteRepository.save(cliente);
+            CorriereEntity corriere = new CorriereEntity("gianni","francati","g@gmail.com","a");
+            corriere.initUsername();
+            corriereRepository.save(corriere);
             CommercianteEntity commercianteEntity = new CommercianteEntity("matteo","minzi",
                     "mm@gmail.com","1234");
             commercianteEntity.initUsername();

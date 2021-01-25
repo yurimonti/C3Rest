@@ -3,7 +3,7 @@ package it.unicam.cs.ids.papcteam.c3Rest.controller;
 import it.unicam.cs.ids.papcteam.c3Rest.entity.*;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.ProdottoRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.service.ClienteService;
-import it.unicam.cs.ids.papcteam.c3Rest.service.OrdineService;
+import it.unicam.cs.ids.papcteam.c3Rest.service.GestoreOrdini;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +17,7 @@ public class ClienteRestController {
     @Autowired
     private ClienteService clienteService;
     @Autowired
-    private OrdineService ordineService;
+    private GestoreOrdini gestoreOrdini;
     @Autowired
     private ProdottoRepository prodottoRepository;
 
@@ -26,7 +26,7 @@ public class ClienteRestController {
 
     @PostMapping("/annullaOrdine")
     public String clearOrdineInCorso(){
-        this.clienteService.clearCreatore();
+        this.gestoreOrdini.clearCreatore();
         return "ordine annullato";
     }
 
@@ -83,10 +83,10 @@ public class ClienteRestController {
 
     @PatchMapping("/{id}/ritiraOrdine/{idOrdine}")
     public String ritiraOrdine(@PathVariable long id,@PathVariable long idOrdine){
-        if(!this.clienteService.getClienteById(id).getOrdini().contains(this.ordineService.getOrdineById(idOrdine)))
+        if(!this.clienteService.getClienteById(id).getOrdini().contains(this.gestoreOrdini.getOrdineById(idOrdine)))
             return "ordine con questo id inesistente";
         else {
-            this.ordineService.ritiraOrdine(idOrdine);
+            this.gestoreOrdini.ritiraOrdine(idOrdine);
             return "ordine ritirato";
         }
     }

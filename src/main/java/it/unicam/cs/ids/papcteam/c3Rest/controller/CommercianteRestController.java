@@ -3,6 +3,7 @@ package it.unicam.cs.ids.papcteam.c3Rest.controller;
 import it.unicam.cs.ids.papcteam.c3Rest.entity.*;
 import it.unicam.cs.ids.papcteam.c3Rest.repository.NegozioRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.service.CommercianteService;
+import it.unicam.cs.ids.papcteam.c3Rest.service.GestoreNegozi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class CommercianteRestController {
     @Autowired
     private CommercianteService commercianteService;
     @Autowired
-    private NegozioRepository negozioRepository;
+    private GestoreNegozi gestoreNegozi;
 
     public CommercianteRestController() {
     }
@@ -41,8 +42,13 @@ public class CommercianteRestController {
     public ProdottoEntity modificaProdotto(@PathVariable long id,@RequestParam long idProdotto,@RequestParam int numero,
                                            @RequestParam boolean aggiunta){
         ProdottoEntity p = this.commercianteService.modificaNumeroProdotto(id,idProdotto,numero,aggiunta);
-        this.negozioRepository.save(this.commercianteService.getCommercianteById(id).getNegozio());
+        this.gestoreNegozi.addOrUpdateNegozio(this.commercianteService.getCommercianteById(id).getNegozio());
         return p;
+    }
+
+    @DeleteMapping("/{id}/eliminaProdotto")
+    public void deleteProdotto(@PathVariable long id,@RequestParam long idProdotto){
+        this.commercianteService.deleteProdotto(id,idProdotto);
     }
 
     @GetMapping("/{id}/ordiniInNegozio")

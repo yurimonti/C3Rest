@@ -15,7 +15,7 @@ public class LockerService {
     @Autowired
     private LockerRepository lockerRepository;
     @Autowired
-    private OrdineRepository ordineRepository;
+    private GestoreOrdini gestoreOrdini;
 
     public LockerService() {
     }
@@ -25,7 +25,7 @@ public class LockerService {
     }
     public List<OrdineEntity> getOrdiniLocker(long id){
         LockerEntity locker= this.lockerRepository.findById(id).orElseThrow(NullPointerException::new);
-        return ordineRepository.findAll().stream()
+        return gestoreOrdini.getOrdini().stream()
                 .filter(ordineEntity -> ordineEntity.getDestinazione().getId()==locker.getId())
                 .collect(Collectors.toList());
     }

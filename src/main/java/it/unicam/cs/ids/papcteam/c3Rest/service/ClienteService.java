@@ -15,16 +15,19 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
     @Autowired
+    private GestoreOrdini gestoreOrdini;
+    /*@Autowired
     private NegozioRepository negozioRepository;
     @Autowired
     private ProdottoRepository prodottoRepository;
     @Autowired
     private LockerRepository lockerRepository;
+    private CreatoreOrdine creatoreOrdine;*/
 
-    private CreatoreOrdine creatoreOrdine;
+
 
     public ClienteService() {
-        this.creatoreOrdine = new ConcreteCreatoreOrdine();
+        /*this.creatoreOrdine = new ConcreteCreatoreOrdine();*/
     }
 
     public List<OrdineEntity> getOrdiniCliente(long id){
@@ -40,7 +43,7 @@ public class ClienteService {
                 o.getStatoOrdine()==StatoOrdine.RITIRO_NEGOZIO).collect(Collectors.toList());
     }
 
-    public NegozioEntity setEmittenteOrdine(long idNegozio){
+    /*public NegozioEntity setEmittenteOrdine(long idNegozio){
         if (this.negozioRepository.findAll().stream().noneMatch(negozioEntity -> negozioEntity.getId()==idNegozio))
             throw new NullPointerException("id negozio inesistente");
         NegozioEntity n = negozioRepository.getOne(idNegozio);
@@ -54,9 +57,30 @@ public class ClienteService {
         LockerEntity l = lockerRepository.getOne(idLocker);
         this.creatoreOrdine.setDestinazione(l);
         return l;
+    }*/
+    public NegozioEntity setEmittenteOrdine(long idNegozio){
+        return this.gestoreOrdini.setEmittenteOrdine(idNegozio);
     }
 
+    public LockerEntity setDestinazioneOrdine(long idLocker){
+        return this.gestoreOrdini.setDestinazione(idLocker);
+    }
     public ProdottoEntity setProdottoOrdine(long idProdotto,int number){
+        return this.gestoreOrdini.setProdottoOrdine(idProdotto,number);
+    }
+
+    public OrdineEntity addOrdineToCliente(long id) {
+        if (this.clienteRepository.findAll().stream().noneMatch(clienteEntity -> clienteEntity.getId() == id))
+            throw new NullPointerException("cliente con questo id inesistente");
+        ClienteEntity cliente = getClienteById(id);
+        OrdineEntity o = this.gestoreOrdini.creaOrdine();
+        cliente.getOrdini().add(o);
+        this.clienteRepository.save(cliente);
+        this.gestoreOrdini.clearCreatore();
+        return o;
+    }
+
+    /*public ProdottoEntity setProdottoOrdine(long idProdotto,int number){
         if(this.creatoreOrdine.getEmittente().getProdotti().stream().noneMatch(prodottoEntity -> prodottoEntity.getId()==idProdotto))
             throw new NullPointerException("nessun Prodotto con questo Id");
         ProdottoEntity prodotto = this.prodottoRepository.getOne(idProdotto);
@@ -66,7 +90,7 @@ public class ClienteService {
         this.creatoreOrdine.addProdotto(p,number);
         return this.creatoreOrdine.getProdotti().stream().filter(prodottoEntity ->
                 prodottoEntity.getSerialCode()==prodotto.getSerialCode()).findFirst().orElseThrow(NullPointerException::new);
-        /*if(this.creatoreOrdine.getEmittente().getProdotti().stream().noneMatch(prodottoEntity -> prodottoEntity.getId()==idProdotto))
+        *//*if(this.creatoreOrdine.getEmittente().getProdotti().stream().noneMatch(prodottoEntity -> prodottoEntity.getId()==idProdotto))
             throw new NullPointerException("nessun Prodotto con questo Id");
         ProdottoEntity prodotto = this.prodottoRepository.getOne(idProdotto);
         ProdottoEntity prodottoIn;
@@ -79,8 +103,8 @@ public class ClienteService {
             this.creatoreOrdine.addProdotto(prodottoIn,number);
         }
         if(prodottoIn.getNumero()>prodotto.getNumero())throw new IllegalArgumentException("numero maggiore del disponibile");
-        return prodottoIn;*/
-    }
+        return prodottoIn;*//*
+    }*/
 
     public ClienteEntity getClienteById(long id){
         if(this.clienteRepository.findAll().stream().noneMatch(clienteEntity -> clienteEntity.getId()==id))throw
@@ -89,7 +113,7 @@ public class ClienteService {
         return this.clienteRepository.getOne(id);
     }
 
-    public OrdineEntity addOrdineToCliente(long id) {
+    /*public OrdineEntity addOrdineToCliente(long id) {
         if (this.clienteRepository.findAll().stream().noneMatch(clienteEntity -> clienteEntity.getId() == id))
             throw new NullPointerException("cliente con questo id inesistente");
         ClienteEntity cliente = getClienteById(id);
@@ -101,7 +125,7 @@ public class ClienteService {
         this.clienteRepository.save(cliente);
         clearCreatore();
         return o;
-    }
+    }*/
 
     /*public OrdineEntity addOrdineToCliente(long id){
         if (this.clienteRepository.findAll().stream().noneMatch(clienteEntity -> clienteEntity.getId()==id))
@@ -134,9 +158,9 @@ public class ClienteService {
         return ordine;
     }*/
 
-    public void clearCreatore(){
+    /*public void clearCreatore(){
         this.creatoreOrdine.setEmittente(null);
         this.creatoreOrdine.setDestinazione(null);
         this.creatoreOrdine.getProdotti().clear();
-    }
+    }*/
 }

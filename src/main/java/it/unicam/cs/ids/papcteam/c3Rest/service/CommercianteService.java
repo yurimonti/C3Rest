@@ -17,9 +17,9 @@ public class CommercianteService {
     @Autowired
     private CommercianteRepository commercianteRepository;
     @Autowired
-    private OrdineRepository ordineRepository;
+    private GestoreOrdini gestoreOrdini;
     @Autowired
-    private ChiamataRepository chiamataRepository;
+    private GestoreChiamate gestoreChiamate;
 
     public CommercianteEntity getCommercianteById(long id){
         if(this.commercianteRepository.findAll().stream().noneMatch(commercianteEntity -> commercianteEntity.getId()==id))throw
@@ -40,12 +40,16 @@ public class CommercianteService {
         return p;
     }
 
+    public void deleteProdotto(long idCommerciante,long idProdotto){
+        getProdottiNegozio(idCommerciante).removeIf(p-> p.getId()==idProdotto);
+    }
+
     public List<ProdottoEntity> getProdottiNegozio(long id){
         return getCommercianteById(id).getNegozio().getProdotti();
     }
 
     public List<OrdineEntity> getOrdiniCommerciante(long id,Predicate<OrdineEntity> predicate){
-        return this.ordineRepository.findAll().stream().filter(ordineEntity ->
+        return this.gestoreOrdini.getOrdini().stream().filter(ordineEntity ->
                 ordineEntity.getEmittente().getId()==getCommercianteById(id).getNegozio().getId())
                 .filter(predicate)
                 .collect(Collectors.toList());
@@ -53,10 +57,8 @@ public class CommercianteService {
 
     public void effettuaChiamata(long id,long idOrdine){
         CommercianteEntity commerciante = getCommercianteById(id);
-        OrdineEntity ordine = getOrdiniCommerciante(id,ordineEntity -> true).stream().filter(o -> o.getId()==idOrdine).findFirst().orElseThrow(NullPointerException::new);
-        ChiamataEntity chiamata = new ChiamataEntity();
-        chiamata.setNegozio(commerciante.getNegozio());
-        chiamata.setOrdine(ordine);
-        this.chiamataRepository.save(chiamata);
+        OrdineEntity ordine = getOrdiniCommerciante(id,ordineEntity -> true).stream().filter(o -> o.getId()==idOrdine)
+                .findFirst().orElseThrow(NullPointerException::new);
+        this.gestoreChiamate.addChiamata(this.gestoreChiamate.createChiamata(commerciante.getNegozio(),ordine));
     }
 }

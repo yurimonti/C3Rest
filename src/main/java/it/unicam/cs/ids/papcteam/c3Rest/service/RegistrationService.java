@@ -18,7 +18,7 @@ public class RegistrationService {
     @Autowired
     private CommercianteRepository commercianteRepository;
     @Autowired
-    private CorriereRepository corriereRepository;
+    private CorriereService corriereService;
 
     public RegistrationService(){}
 
@@ -30,6 +30,7 @@ public class RegistrationService {
 
     private void createCliente(String nome, String cognome, String email, String password){
         ClienteEntity cl = new ClienteEntity(nome,cognome,email,password);
+        cl.initUsername();
         this.clienteRepository.save(cl);
     }
     /*public void createCommerciante(String nome, String cognome, String email, String password){
@@ -38,7 +39,8 @@ public class RegistrationService {
     }*/
     private void createCorriere(String nome, String cognome, String email, String password){
         CorriereEntity cl = new CorriereEntity(nome,cognome,email,password);
-        this.corriereRepository.save(cl);
+        cl.initUsername();
+        this.corriereService.addCorriere(cl);
     }
 
     public void register(String nome, String cognome, String email, String password,String type){
