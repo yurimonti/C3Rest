@@ -64,7 +64,8 @@ public class ClienteService {
         p.setSerialCode(prodotto.getSerialCode());
         p.setNumero(number);
         this.creatoreOrdine.addProdotto(p,number);
-        return p;
+        return this.creatoreOrdine.getProdotti().stream().filter(prodottoEntity ->
+                prodottoEntity.getSerialCode()==prodotto.getSerialCode()).findFirst().orElseThrow(NullPointerException::new);
         /*if(this.creatoreOrdine.getEmittente().getProdotti().stream().noneMatch(prodottoEntity -> prodottoEntity.getId()==idProdotto))
             throw new NullPointerException("nessun Prodotto con questo Id");
         ProdottoEntity prodotto = this.prodottoRepository.getOne(idProdotto);
