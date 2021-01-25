@@ -1,6 +1,7 @@
 package it.unicam.cs.ids.papcteam.c3Rest.controller;
 
 import it.unicam.cs.ids.papcteam.c3Rest.entity.*;
+import it.unicam.cs.ids.papcteam.c3Rest.repository.NegozioRepository;
 import it.unicam.cs.ids.papcteam.c3Rest.service.CommercianteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,8 @@ import java.util.stream.Collectors;
 public class CommercianteRestController {
     @Autowired
     private CommercianteService commercianteService;
+    @Autowired
+    private NegozioRepository negozioRepository;
 
     public CommercianteRestController() {
     }
@@ -32,6 +35,14 @@ public class CommercianteRestController {
     @GetMapping("/{id}/prodotti")
     public List<ProdottoEntity> getProdottiNegozio(@PathVariable long id){
         return this.commercianteService.getProdottiNegozio(id);
+    }
+
+    @PatchMapping("/{id}/modificaProdotto")
+    public ProdottoEntity modificaProdotto(@PathVariable long id,@RequestParam long idProdotto,@RequestParam int numero,
+                                           @RequestParam boolean aggiunta){
+        ProdottoEntity p = this.commercianteService.modificaNumeroProdotto(id,idProdotto,numero,aggiunta);
+        this.negozioRepository.save(this.commercianteService.getCommercianteById(id).getNegozio());
+        return p;
     }
 
     @GetMapping("/{id}/ordiniInNegozio")

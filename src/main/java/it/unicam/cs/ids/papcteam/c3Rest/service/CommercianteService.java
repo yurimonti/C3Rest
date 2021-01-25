@@ -28,6 +28,18 @@ public class CommercianteService {
             return this.commercianteRepository.getOne(id);
     }
 
+    public ProdottoEntity modificaNumeroProdotto(long idCommerciante,long idProdotto,int numero,boolean aggiunta){
+        Predicate<ProdottoEntity> predicate = p ->p.getId()==idProdotto;
+        ProdottoEntity p = getProdottiNegozio(idCommerciante).stream().filter(predicate).findFirst()
+                .orElseThrow(()->new NullPointerException("prodotto con questo Id inesistente"));
+        if (aggiunta) p.setNumero(p.getNumero()+numero);
+        else {
+            if(p.getNumero()<=numero)p.setNumero(0);
+            else p.setNumero(p.getNumero()-numero);
+        }
+        return p;
+    }
+
     public List<ProdottoEntity> getProdottiNegozio(long id){
         return getCommercianteById(id).getNegozio().getProdotti();
     }
