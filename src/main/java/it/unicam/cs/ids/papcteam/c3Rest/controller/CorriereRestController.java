@@ -54,13 +54,13 @@ public class CorriereRestController {
         this.corriereService.addCorriere(corriere);
     }
 
-    @PostMapping("{id}/ordini/ritiraOrdini")
+    @PostMapping("{id}/ordini/ritiraOrdine")
     public void ritiraOrdine(@PathVariable long id,@RequestParam long idOrdine){
         getCorriereById(id).getOrdini().stream().filter(o->o.getId()==idOrdine).findFirst()
                 .orElseThrow(() -> new NullPointerException("ordine con questo id inesistente"))
                 .setStatoOrdine(StatoOrdine.IN_TRASPORTO);
     }
-    @PostMapping("{id}/ordini/ritiraOrdini")
+    @PostMapping("{id}/ordini/consegnaOrdine")
     public void consegnaOrdine(@PathVariable long id,@RequestParam long idOrdine){
         getCorriereById(id).getOrdini().stream().filter(o->o.getId()==idOrdine).findFirst()
                 .orElseThrow(() -> new NullPointerException("ordine con questo id inesistente"))
