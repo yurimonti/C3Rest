@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 public class CommercianteRestController {
     @Autowired
     private CommercianteService commercianteService;
-    @Autowired
-    private GestoreNegozi gestoreNegozi;
+/*    @Autowired
+    private GestoreNegozi gestoreNegozi;*/
 
     public CommercianteRestController() {
     }
@@ -41,9 +41,15 @@ public class CommercianteRestController {
     @PatchMapping("/{id}/modificaProdotto")
     public ProdottoEntity modificaProdotto(@PathVariable long id,@RequestParam long idProdotto,@RequestParam int numero,
                                            @RequestParam boolean aggiunta){
-        ProdottoEntity p = this.commercianteService.modificaNumeroProdotto(id,idProdotto,numero,aggiunta);
-        this.gestoreNegozi.addOrUpdateNegozio(this.commercianteService.getCommercianteById(id).getNegozio());
-        return p;
+        return this.commercianteService.modificaNumeroProdotto(id,idProdotto,numero,aggiunta);
+    }
+
+    @PostMapping("/{id}/aggiungiProdotto")
+    public void addProdotto(@PathVariable long id,@RequestParam String nome,@RequestParam String descrizione,
+                            @RequestParam double prezzo,@RequestParam int numero){
+        ProdottoEntity p = new ProdottoEntity(nome,descrizione,prezzo);
+        if (numero>0) p.setNumero(numero);
+        this.commercianteService.aggiungiProdotto(id,p);
     }
 
     @DeleteMapping("/{id}/eliminaProdotto")

@@ -20,7 +20,6 @@ public class CorriereRestController {
     @Autowired
     private GestoreChiamate gestoreChiamate;
 
-
     public CorriereRestController() {
     }
 

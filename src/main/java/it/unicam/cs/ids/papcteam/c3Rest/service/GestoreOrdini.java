@@ -23,9 +23,15 @@ public class GestoreOrdini {
         this.creatoreOrdine = new ConcreteCreatoreOrdine();
     }
 
+    public CreatoreOrdine getCreatoreOrdine() {
+        return creatoreOrdine;
+    }
+
     public OrdineEntity getOrdineById(long id){
         return this.ordineRepository.findById(id).orElseThrow(NullPointerException::new);
     }
+
+
 
     public List<OrdineEntity> getOrdini(){
         return this.ordineRepository.findAll();

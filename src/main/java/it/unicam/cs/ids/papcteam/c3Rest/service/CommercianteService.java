@@ -20,6 +20,8 @@ public class CommercianteService {
     private GestoreOrdini gestoreOrdini;
     @Autowired
     private GestoreChiamate gestoreChiamate;
+    @Autowired
+    private GestoreNegozi gestoreNegozi;
 
     public CommercianteEntity getCommercianteById(long id){
         if(this.commercianteRepository.findAll().stream().noneMatch(commercianteEntity -> commercianteEntity.getId()==id))throw
@@ -37,7 +39,14 @@ public class CommercianteService {
             if(p.getNumero()<=numero)p.setNumero(0);
             else p.setNumero(p.getNumero()-numero);
         }
+        this.gestoreNegozi.addOrUpdateNegozio(getCommercianteById(idCommerciante).getNegozio());
         return p;
+    }
+
+    public void aggiungiProdotto(long idCommerciante,ProdottoEntity prodotto){
+        NegozioEntity n = this.getCommercianteById(idCommerciante).getNegozio();
+        n.getProdotti().add(prodotto);
+        this.gestoreNegozi.addOrUpdateNegozio(n);
     }
 
     public void deleteProdotto(long idCommerciante,long idProdotto){

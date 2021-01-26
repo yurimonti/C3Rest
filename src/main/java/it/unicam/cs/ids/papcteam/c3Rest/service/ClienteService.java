@@ -16,18 +16,13 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
     @Autowired
     private GestoreOrdini gestoreOrdini;
-    /*@Autowired
-    private NegozioRepository negozioRepository;
-    @Autowired
-    private ProdottoRepository prodottoRepository;
-    @Autowired
-    private LockerRepository lockerRepository;
-    private CreatoreOrdine creatoreOrdine;*/
-
-
 
     public ClienteService() {
         /*this.creatoreOrdine = new ConcreteCreatoreOrdine();*/
+    }
+
+    public GestoreOrdini getGestoreOrdini(){
+        return this.gestoreOrdini;
     }
 
     public List<OrdineEntity> getOrdiniCliente(long id){

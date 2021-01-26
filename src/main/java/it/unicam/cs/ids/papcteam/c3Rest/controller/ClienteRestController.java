@@ -18,8 +18,8 @@ public class ClienteRestController {
     private ClienteService clienteService;
     @Autowired
     private GestoreOrdini gestoreOrdini;
-    @Autowired
-    private ProdottoRepository prodottoRepository;
+    /*@Autowired
+    private ProdottoRepository prodottoRepository;*/
 
     public ClienteRestController() {
     }
@@ -51,7 +51,8 @@ public class ClienteRestController {
         ProdottoEntity p = this.clienteService.setProdottoOrdine(idProdotto,number);
         if(Objects.isNull(p)) s= "nessun Prodotto con questo Id";
         else {
-            if(p.getNumero()>this.prodottoRepository.getOne(idProdotto).getNumero()){
+            if(this.gestoreOrdini.getCreatoreOrdine().getEmittente().getProdotti()
+                    .stream().filter(pr->pr.getId()==idProdotto).anyMatch(pr->p.getNumero()>pr.getNumero())){
                 s = "numero superiore da quello disponibile";
                 clearOrdineInCorso();
             }else
@@ -83,7 +84,8 @@ public class ClienteRestController {
 
     @PatchMapping("/{id}/ritiraOrdine/{idOrdine}")
     public String ritiraOrdine(@PathVariable long id,@PathVariable long idOrdine){
-        if(!this.clienteService.getClienteById(id).getOrdini().contains(this.gestoreOrdini.getOrdineById(idOrdine)))
+        if(!this.clienteService.getClienteById(id).getOrdini()
+                .contains(this.gestoreOrdini.getOrdineById(idOrdine)))
             return "ordine con questo id inesistente";
         else {
             this.gestoreOrdini.ritiraOrdine(idOrdine);
