@@ -50,7 +50,8 @@ public class CommercianteService {
     }
 
     public void deleteProdotto(long idCommerciante,long idProdotto){
-        getProdottiNegozio(idCommerciante).removeIf(p-> p.getId()==idProdotto);
+        NegozioEntity n = getCommercianteById(idCommerciante).getNegozio();
+        this.gestoreNegozi.deleteProdotto(n.getId(),idProdotto);
     }
 
     public List<ProdottoEntity> getProdottiNegozio(long id){
